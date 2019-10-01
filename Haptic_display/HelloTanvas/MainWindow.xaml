@@ -1,0 +1,26 @@
+﻿<Window x:Class="HelloTanvas.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HelloTanvas"
+        mc:Ignorable="d"
+        Title="HelloTanvas"
+        WindowStyle="None" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        ManipulationStarting="Window_ManipulationStarting"
+        ManipulationDelta="Window_ManipulationDelta">
+    <Grid>
+        <!--<Image Source="Assets/HelloTanvas_visual.png" Width="1020" Height="738" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Left"/>-->
+        <Image Source="Assets/example2.png" Width="1280" Height="800" Margin="0,0,-412,-199" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <!--<Rectangle Fill="Black" Name="manRect"
+                 Width="1280" Height="800" 
+                 IsManipulationEnabled="true" Opacity="0"
+                 Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" />-->
+        <Rectangle Fill="Black" Name="manRect"
+                 Width="1280" Height="800" 
+                 IsManipulationEnabled="true" Opacity="0"
+                 Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" />
+    </Grid>
+</Window>
