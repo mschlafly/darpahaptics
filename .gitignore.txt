@@ -4,8 +4,12 @@
 *.exe
 *.obj
 *.o
-*.cashe
+*.cache
 *.pbd
 *.lref
-**/obj
-obj/**
+*/obj/*
+*/ARM/*
+*/x86/*
+*/x64/*
+*/Debug/*
+*/Release/*
