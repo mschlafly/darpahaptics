@@ -27,7 +27,7 @@ namespace HelloTanvas
     public partial class MainWindow : Window
     {
 
-        string docPath = "C:/Users/brandon/Desktop/Tanvas/Haptic_display/"; // Path for text files
+        string docPath = "C:/Users/numur/Desktop/Tanvas/darpahaptics/Haptic_display"; // Path for text files
         // Time vairables for detecting double tap and input
         DateTime onetap_time = DateTime.Now;
         DateTime starttime = DateTime.Now;
@@ -142,6 +142,9 @@ namespace HelloTanvas
             x_person_unity = 7f;
             y_person_unity = 13f;
             th_person = 0f;
+            //x_person_unity = 16f;
+            //y_person_unity = 10f;
+            //th_person = 0.2f;
             // Position of person in tablet
             x_person_tablet = W_tablet / 2;
             y_person_tablet = H_tablet / 2;
@@ -330,162 +333,162 @@ namespace HelloTanvas
 
             // COMMENT TO RUN WITH TOUCH DETECTION
 
-            /////////////////////////////////////////////////////////////////////////////////////////
-            ////                             Update Sprites in Loop
-            /////////////////////////////////////////////////////////////////////////////////////////
-            //bool flag = true;
-            //string person_position_string = "";
-            //int MAX_STRING_SAVE_PREV = 50;
-            //char[] person_position_string_prev = new char[MAX_STRING_SAVE_PREV];
-            //bool strings_equal;
-            //int inputstring;
-            //string temp_string;
-            //int j, k, temp_int;
-            //float temp_float;
-            //int radius_squared = (W_tablet / 2) ^ 2 + (H_tablet / 2) ^ 2;
-            //do
-            //{
-            //    //person_position_string = "";
-            //    try
-            //    {
-            //        person_position_string = File.ReadAllText(System.IO.Path.Combine(docPath, "person_position.txt"));
-            //    }
-            //    catch
-            //    {
-            //        Console.WriteLine("Didn't work");
-            //    }
+            ///////////////////////////////////////////////////////////////////////////////////////
+            //                             Update Sprites in Loop
+            ///////////////////////////////////////////////////////////////////////////////////////
+            bool flag = true;
+            string person_position_string = "";
+            int MAX_STRING_SAVE_PREV = 50;
+            char[] person_position_string_prev = new char[MAX_STRING_SAVE_PREV];
+            bool strings_equal;
+            int inputstring;
+            string temp_string;
+            int j, k, temp_int;
+            float temp_float;
+            int radius_squared = (W_tablet / 2) ^ 2 + (H_tablet / 2) ^ 2;
+            do
+            {
+                //person_position_string = "";
+                try
+                {
+                    person_position_string = File.ReadAllText(System.IO.Path.Combine(docPath, "person_position.txt"));
+                }
+                catch
+                {
+                    Console.WriteLine("Didn't work");
+                }
 
-            //    i = 0;
-            //    strings_equal = (person_position_string_prev[i] == person_position_string[i]);
-            //    while (strings_equal && (i < MAX_STRING_SAVE_PREV))
-            //    {
-            //        strings_equal = (strings_equal && (person_position_string_prev[i] == person_position_string[i]));
-            //        i++;
-            //        //printf("%d \n ", strings_equal);
-            //    }
-            //    if (strings_equal)
-            //    {
-            //        Console.WriteLine("Strings equal");
-            //    }
-            //    else
-            //    {
-            //        // Update Tanvas
-            //        inputstring = person_position_string.Length;
-            //        temp_string = "";
-            //        j = 0;
-            //        k = 0;
-            //        // i iterates through characters in file string
-            //        // is j needed?
-            //        // k indicated how many numbers have been read to indicate xposition, yposition, and orientation
-            //        for (i = 0; i < inputstring; i++)
-            //        {
-            //            //System.Diagnostics.Debug.WriteLine(person_position_string[i]);
-            //            if (person_position_string[i] == ',')
-            //            {
-            //                temp_string = temp_string + '\0';
-            //                if (k == 0)
-            //                {
-            //                    temp_int = Convert.ToInt32(temp_string);
-            //                    x_person_unity = temp_int;
-            //                    System.Diagnostics.Debug.WriteLine("Person X position: {0}", temp_int);
-            //                    k++;
-            //                }
-            //                else if (k == 1)
-            //                {
-            //                    temp_int = Convert.ToInt32(temp_string);
-            //                    y_person_unity = temp_int;
-            //                    System.Diagnostics.Debug.WriteLine("Person Y position: {0}", temp_int);
-            //                    k++;
-            //                }
-            //                else if (k == 2)
-            //                {
-            //                    temp_float = float.Parse(temp_string);
-            //                    th_person = temp_float;
-            //                    System.Diagnostics.Debug.WriteLine("Person Theta position: {0}", temp_float);
-            //                    k++;
-            //                }
-            //                temp_string = "";
-            //                j = 0;
-            //            }
-            //            else // Store the next vaue in string
-            //            {
-            //                temp_string = temp_string + person_position_string[i];
-            //                //j++;
-            //            }
-            //        }
+                i = 0;
+                strings_equal = (person_position_string_prev[i] == person_position_string[i]);
+                while (strings_equal && (i < MAX_STRING_SAVE_PREV))
+                {
+                    strings_equal = (strings_equal && (person_position_string_prev[i] == person_position_string[i]));
+                    i++;
+                    //printf("%d \n ", strings_equal);
+                }
+                if (strings_equal)
+                {
+                    Console.WriteLine("Strings equal");
+                }
+                else
+                {
+                    // Update Tanvas
+                    inputstring = person_position_string.Length;
+                    temp_string = "";
+                    j = 0;
+                    k = 0;
+                    // i iterates through characters in file string
+                    // is j needed?
+                    // k indicated how many numbers have been read to indicate xposition, yposition, and orientation
+                    for (i = 0; i < inputstring; i++)
+                    {
+                        //System.Diagnostics.Debug.WriteLine(person_position_string[i]);
+                        if (person_position_string[i] == ',')
+                        {
+                            temp_string = temp_string + '\0';
+                            if (k == 0)
+                            {
+                                temp_int = Convert.ToInt32(temp_string);
+                                x_person_unity = temp_int;
+                                System.Diagnostics.Debug.WriteLine("Person X position: {0}", temp_int);
+                                k++;
+                            }
+                            else if (k == 1)
+                            {
+                                temp_int = Convert.ToInt32(temp_string);
+                                y_person_unity = temp_int;
+                                System.Diagnostics.Debug.WriteLine("Person Y position: {0}", temp_int);
+                                k++;
+                            }
+                            else if (k == 2)
+                            {
+                                temp_float = float.Parse(temp_string);
+                                th_person = temp_float;
+                                System.Diagnostics.Debug.WriteLine("Person Theta position: {0}", temp_float);
+                                k++;
+                            }
+                            temp_string = "";
+                            j = 0;
+                        }
+                        else // Store the next vaue in string
+                        {
+                            temp_string = temp_string + person_position_string[i];
+                            //j++;
+                        }
+                    }
 
-            //        ///////////////////////////////////////////////////////////////////////////////////////
-            //        //                             Update Building Locations
-            //        ///////////////////////////////////////////////////////////////////////////////////////
-            //        for (i = 0; i < num_bld_small; i++)
-            //        {
-            //            Tuple<int, int> result = unitytotanvas(bld_small_x_unity[i], bld_small_y_unity[i], x_person_unity, y_person_unity, zoom_ratio);
-            //            bld_small_x_tablet[i] = result.Item1;
-            //            bld_small_y_tablet[i] = result.Item2;
-            //        }
-            //        for (i = 0; i < num_bld_large; i++)
-            //        {
-            //            Tuple<int, int> result = unitytotanvas(bld_large_x_unity[i], bld_large_y_unity[i], x_person_unity, y_person_unity, zoom_ratio);
-            //            bld_large_x_tablet[i] = result.Item1;
-            //            bld_large_y_tablet[i] = result.Item2;
-            //        }
-            //        for (i = 0; i < num_bld_2horiz; i++)
-            //        {
-            //            Tuple<int, int> result = unitytotanvas(bld_2horiz_x_unity[i], bld_2horiz_y_unity[i], x_person_unity, y_person_unity, zoom_ratio);
-            //            bld_2horiz_x_tablet[i] = result.Item1;
-            //            bld_2horiz_y_tablet[i] = result.Item2;
-            //        }
-            //        for (i = 0; i < num_bld_2vert; i++)
-            //        {
-            //            Tuple<int, int> result = unitytotanvas(bld_2vert_x_unity[i], bld_2vert_y_unity[i], x_person_unity, y_person_unity, zoom_ratio);
-            //            bld_2vert_x_tablet[i] = result.Item1;
-            //            bld_2vert_y_tablet[i] = result.Item2;
-            //        }
+                    ///////////////////////////////////////////////////////////////////////////////////////
+                    //                             Update Building Locations
+                    ///////////////////////////////////////////////////////////////////////////////////////
+                    for (i = 0; i < num_bld_small; i++)
+                    {
+                        Tuple<int, int> result = unitytotanvas(bld_small_x_unity[i], bld_small_y_unity[i], x_person_unity, y_person_unity, zoom_ratio);
+                        bld_small_x_tablet[i] = result.Item1;
+                        bld_small_y_tablet[i] = result.Item2;
+                    }
+                    for (i = 0; i < num_bld_large; i++)
+                    {
+                        Tuple<int, int> result = unitytotanvas(bld_large_x_unity[i], bld_large_y_unity[i], x_person_unity, y_person_unity, zoom_ratio);
+                        bld_large_x_tablet[i] = result.Item1;
+                        bld_large_y_tablet[i] = result.Item2;
+                    }
+                    for (i = 0; i < num_bld_2horiz; i++)
+                    {
+                        Tuple<int, int> result = unitytotanvas(bld_2horiz_x_unity[i], bld_2horiz_y_unity[i], x_person_unity, y_person_unity, zoom_ratio);
+                        bld_2horiz_x_tablet[i] = result.Item1;
+                        bld_2horiz_y_tablet[i] = result.Item2;
+                    }
+                    for (i = 0; i < num_bld_2vert; i++)
+                    {
+                        Tuple<int, int> result = unitytotanvas(bld_2vert_x_unity[i], bld_2vert_y_unity[i], x_person_unity, y_person_unity, zoom_ratio);
+                        bld_2vert_x_tablet[i] = result.Item1;
+                        bld_2vert_y_tablet[i] = result.Item2;
+                    }
 
-            //        ///////////////////////////////////////////////////////////////////////////////////////
-            //        //                             Update Sprites
-            //        ///////////////////////////////////////////////////////////////////////////////////////
-            //        for (i = 0; i < num_bld_small; i++)
-            //        {
-            //            bld_small_sprites[i].X = bld_small_x_tablet[i];
-            //            bld_small_sprites[i].Y = bld_small_y_tablet[i] + tanvas_ydir_offset;
-            //            bld_small_sprites[i].PivotX = x_person_tablet;
-            //            bld_small_sprites[i].PivotY = y_person_tablet;
-            //            bld_small_sprites[i].Rotation = th_person;
-            //            myView.AddSprite(bld_small_sprites[i]);
-            //        }
-            //        for (i = 0; i < num_bld_large; i++)
-            //        {
-            //            bld_large_sprites[i].X = bld_large_x_tablet[i];
-            //            bld_large_sprites[i].Y = bld_large_y_tablet[i] + tanvas_ydir_offset;
-            //            bld_large_sprites[i].PivotX = x_person_tablet;
-            //            bld_large_sprites[i].PivotY = y_person_tablet;
-            //            bld_large_sprites[i].Rotation = th_person;
-            //            myView.AddSprite(bld_large_sprites[i]);
-            //        }
-            //        for (i = 0; i < num_bld_2horiz; i++)
-            //        {
-            //            bld_2horiz_sprites[i].X = bld_2horiz_x_tablet[i];
-            //            bld_2horiz_sprites[i].Y = bld_2horiz_y_tablet[i] + tanvas_ydir_offset;
-            //            bld_2horiz_sprites[i].PivotX = x_person_tablet;
-            //            bld_2horiz_sprites[i].PivotY = y_person_tablet;
-            //            bld_2horiz_sprites[i].Rotation = th_person;
-            //            myView.AddSprite(bld_2horiz_sprites[i]);
-            //        }
-            //        for (i = 0; i < num_bld_2vert; i++)
-            //        {
-            //            bld_2vert_sprites[i].X = bld_2vert_x_tablet[i];
-            //            bld_2vert_sprites[i].Y = bld_2vert_y_tablet[i] + tanvas_ydir_offset;
-            //            bld_2vert_sprites[i].PivotX = x_person_tablet;
-            //            bld_2vert_sprites[i].PivotY = y_person_tablet;
-            //            bld_2vert_sprites[i].Rotation = th_person;
-            //            myView.AddSprite(bld_2vert_sprites[i]);
-            //        }
-            //        //myView.RemoveSprite(sprites[2]);
-            //        //sprites.Remove(sprites[2]);
-            //    }
+                    ///////////////////////////////////////////////////////////////////////////////////////
+                    //                             Update Sprites
+                    ///////////////////////////////////////////////////////////////////////////////////////
+                    for (i = 0; i < num_bld_small; i++)
+                    {
+                        bld_small_sprites[i].X = bld_small_x_tablet[i];
+                        bld_small_sprites[i].Y = bld_small_y_tablet[i] + tanvas_ydir_offset;
+                        bld_small_sprites[i].PivotX = x_person_tablet;
+                        bld_small_sprites[i].PivotY = y_person_tablet;
+                        bld_small_sprites[i].Rotation = th_person;
+                        myView.AddSprite(bld_small_sprites[i]);
+                    }
+                    for (i = 0; i < num_bld_large; i++)
+                    {
+                        bld_large_sprites[i].X = bld_large_x_tablet[i];
+                        bld_large_sprites[i].Y = bld_large_y_tablet[i] + tanvas_ydir_offset;
+                        bld_large_sprites[i].PivotX = x_person_tablet;
+                        bld_large_sprites[i].PivotY = y_person_tablet;
+                        bld_large_sprites[i].Rotation = th_person;
+                        myView.AddSprite(bld_large_sprites[i]);
+                    }
+                    for (i = 0; i < num_bld_2horiz; i++)
+                    {
+                        bld_2horiz_sprites[i].X = bld_2horiz_x_tablet[i];
+                        bld_2horiz_sprites[i].Y = bld_2horiz_y_tablet[i] + tanvas_ydir_offset;
+                        bld_2horiz_sprites[i].PivotX = x_person_tablet;
+                        bld_2horiz_sprites[i].PivotY = y_person_tablet;
+                        bld_2horiz_sprites[i].Rotation = th_person;
+                        myView.AddSprite(bld_2horiz_sprites[i]);
+                    }
+                    for (i = 0; i < num_bld_2vert; i++)
+                    {
+                        bld_2vert_sprites[i].X = bld_2vert_x_tablet[i];
+                        bld_2vert_sprites[i].Y = bld_2vert_y_tablet[i] + tanvas_ydir_offset;
+                        bld_2vert_sprites[i].PivotX = x_person_tablet;
+                        bld_2vert_sprites[i].PivotY = y_person_tablet;
+                        bld_2vert_sprites[i].Rotation = th_person;
+                        myView.AddSprite(bld_2vert_sprites[i]);
+                    }
+                    //myView.RemoveSprite(sprites[2]);
+                    //sprites.Remove(sprites[2]);
+                }
 
-            //} while (flag == true);
+            } while (flag == true);
 
 
 

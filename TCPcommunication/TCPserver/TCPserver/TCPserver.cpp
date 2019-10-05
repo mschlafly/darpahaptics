@@ -1,11 +1,11 @@
-// This program reads a text file containing a string coordinates and
-// sends the string in managable sections over a TCP socket  
-// Meant to be used on a windows OS sending to a linux OS
-
-// The server side of the TCP socket was created with help from here
-// https://gist.github.com/hostilefork/f7cae3dc33e7416f2dd25a402857b6c6
+//// This program reads a text file containing a string coordinates and
+//// sends the string in managable sections over a TCP socket  
+//// Meant to be used on a windows OS sending to a linux OS
 //
-
+//// The server side of the TCP socket was created with help from here
+//// https://gist.github.com/hostilefork/f7cae3dc33e7416f2dd25a402857b6c6
+////
+//
 //tested
 #undef UNICODE
 
@@ -17,18 +17,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// Need to link with Ws2_32.lib
-#pragma comment (lib, "Ws2_32.lib")
+// need to link with ws2_32.lib
+#pragma comment (lib, "ws2_32.lib")
 
 #define DEFAULT_BUFLEN 100 // Max length of string to send over TCP socket
 #define MAX_STRING 10000 // Maximum length of text file string 
-// The number of characters to save to determine if a new string has been opened
+ //The number of characters to save to determine if a new string has been opened
 #define MAX_STRING_SAVE_PREV 200  
 #define MAX_STRING_SAVE_PREV_PERSON 50  
 
-// Set socket-specific values
+ //Set socket-specific values
 #define DEFAULT_PORT "8888"
-//#define DEFAULT_IPv4 "192.168.10.181"
+// #define DEFAULT_IPv4 "192.168.10.181"
 #define DEFAULT_IPv4 "192.168.1.3"
 
 // For reading from file
@@ -38,8 +38,8 @@ using namespace std;
 #include <fstream>
 // Set up file for reading 
 //string docPath_touch = "C:/Users/brandon/Desktop/Tanvas/DARPA_hapticsandtouchdetection/touch_locations.txt";
-string docPath_touch = "C:/Users/brandon/Desktop/Tanvas/Haptic_display/touch_locations.txt";
-string docPath_person = "C:/Users/brandon/Desktop/Tanvas/Haptic_display/person_position.txt";
+string docPath_touch = "C:/Users/numur/Desktop/Tanvas/darpahaptics/Haptic_display/touch_locations.txt";
+string docPath_person = "C:\\Users\\numur\\Desktop\\Tanvas\\darpahaptics\\Haptic_displays\\person_position.txt";
 int filefetch_wait = 500; // Milliseconds between trying to open file
 
 // Global
@@ -50,7 +50,7 @@ void printtofile(char recvbuf_person[DEFAULT_BUFLEN]) {
 	//printf("New string: %s \n\n", recvbuf_person);
 	bool personpos_equal; // boolean to record whether recvbuf_person==recvbuf_person_prev
 	int i = 0;
-	
+
 	personpos_equal = (recvbuf_person_prev[i] == recvbuf_person[i]);
 	while (personpos_equal && (i < MAX_STRING_SAVE_PREV_PERSON)) {
 		personpos_equal = (personpos_equal && (recvbuf_person_prev[i] == recvbuf_person[i]));
@@ -58,7 +58,7 @@ void printtofile(char recvbuf_person[DEFAULT_BUFLEN]) {
 	}
 
 	// If string is new, 
-	if (personpos_equal || (recvbuf_person[0]=='?')) {
+	if (personpos_equal || (recvbuf_person[0] == '?')) {
 		// Don't do anything
 	}
 	else {
@@ -66,7 +66,7 @@ void printtofile(char recvbuf_person[DEFAULT_BUFLEN]) {
 		string person_location_string = "";
 		for (i = 0; i < DEFAULT_BUFLEN; i++) {
 			person_location_string = person_location_string + recvbuf_person[i];
-			if (recvbuf_person[i] == '!') { 
+			if (recvbuf_person[i] == '!') {
 				break;
 			}
 		}
@@ -86,6 +86,7 @@ void printtofile(char recvbuf_person[DEFAULT_BUFLEN]) {
 			else {
 				Sleep(filefetch_wait);
 				printf("failed to open \n");
+				flag2 = 1;
 			}
 		} while (flag2 == 0);
 		file_personlocation << person_location_string;
@@ -101,9 +102,10 @@ void printtofile(char recvbuf_person[DEFAULT_BUFLEN]) {
 
 int __cdecl main(void)
 {
-// Variables
 
-	// Set up file for reading 
+	// Variables
+
+		// Set up file for reading 
 	ifstream file_touchlocations;
 	string string_of_coordinates; // Variable to read from file
 	string string_of_coordinates_prev; // Previous read to check to see if they are the same
@@ -117,8 +119,8 @@ int __cdecl main(void)
 	char recvbuf_section[DEFAULT_BUFLEN];
 	int recvbuflen = DEFAULT_BUFLEN;
 
-// Setting up Socket
-	// Setting up TCP socket
+	// Setting up Socket
+		// Setting up TCP socket
 	WSADATA wsaData;
 	// Variables for TCP socket
 	int iSendResult, iResult;
@@ -197,7 +199,7 @@ int __cdecl main(void)
 	closesocket(ListenSocket);
 
 
-// Test Connection
+	// Test Connection
 	printf("Testing connection \n");
 	int flag = 0;
 	// Receive and send test message
@@ -222,8 +224,8 @@ int __cdecl main(void)
 	} while (flag == 0);
 	printf("Test Completed\n");
 
-// Main loop
-	// Variables for seperating and sending string in sections
+	// Main loop
+		// Variables for seperating and sending string in sections
 	int flag2;
 	int i, i_temp, i_start, i_end = 0, comma_index = 0, end_loop_here;
 	bool endhere = false;
@@ -330,7 +332,7 @@ int __cdecl main(void)
 					return 1;
 				}
 				// Get reply
-					iResult = recv(ClientSocket, recvbuf_person, DEFAULT_BUFLEN, 0);
+				iResult = recv(ClientSocket, recvbuf_person, DEFAULT_BUFLEN, 0);
 				if (iResult <= 0) {
 					flag = 1;
 				}
@@ -361,11 +363,11 @@ int __cdecl main(void)
 		if (iResult <= 0) {
 			flag = 1;
 		}
-		printf("%s \n", recvbuf_person);
+		//printf("%s \n", recvbuf_person);
 		printtofile(recvbuf_person);
 		//printf("reply to done message recieved \n");
 		//done_message_sent = 1;
-		
+
 	} while (flag == 0);
 
 	printf("Closing Socket\n");

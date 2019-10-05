@@ -1,0 +1,11 @@
+
+*~
+*.pyc
+*.exe
+*.obj
+*.o
+*.cashe
+*.pbd
+*.lref
+**/obj
+obj/**
