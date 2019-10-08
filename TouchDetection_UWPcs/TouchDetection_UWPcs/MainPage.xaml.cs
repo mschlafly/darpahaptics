@@ -18,6 +18,7 @@ using System;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.ViewManagement;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -54,7 +55,8 @@ namespace TouchDetection_UWPcs
         public MainPage()
         {
             this.InitializeComponent();
-
+            ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
+        //MaximizeWindowOnLoad();
 
             // Position of person in tablet
             x_person_tablet = W_tablet / 2;
@@ -68,6 +70,11 @@ namespace TouchDetection_UWPcs
             mainCanvas.DoubleTapped += new DoubleTappedEventHandler(target_DoubleTapped);
 
         }
+
+        //private static void MaximizeWindowOnLoad()
+        //{
+        //    ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
+        //}
 
         void target_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {

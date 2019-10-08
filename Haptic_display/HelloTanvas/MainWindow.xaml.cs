@@ -114,7 +114,7 @@ namespace HelloTanvas
         TTexture bld_2vert_texture;
         TMaterial bld_2vert_material;
         TView myView;
-        int tanvas_ydir_offset = 0; //30;
+        int tanvas_ydir_offset = 30; //30;
 
         public MainWindow()
         {
@@ -139,11 +139,11 @@ namespace HelloTanvas
             // Ratio for zooming
             zoom_ratio = H_tablet / H_unity;
             // Starting position of person for initialization
-            x_person_unity = 7f;
-            y_person_unity = 13f;
+            x_person_unity = 23f;
+            y_person_unity = 9f;
             th_person = 0f;
-            //x_person_unity = 16f;
-            //y_person_unity = 10f;
+            //x_person_unity = 23f;
+            //y_person_unity = 9f;
             //th_person = 0.2f;
             // Position of person in tablet
             x_person_tablet = W_tablet / 2;

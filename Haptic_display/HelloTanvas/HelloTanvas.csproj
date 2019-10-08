@@ -132,15 +132,12 @@
   <ItemGroup>
     <Resource Include="Assets\HelloTanvas_testpic.png" />
     <Resource Include="Assets\coarse.png" />
-    <Resource Include="Assets\aerial_map.png" />
     <Resource Include="Assets\building.png" />
     <Resource Include="Assets\person.png" />
     <Resource Include="Assets\bld_2horiz.png" />
     <Resource Include="Assets\bld_large.png" />
     <Resource Include="Assets\bld_small.png" />
     <Resource Include="Assets\bld_2vert.png" />
-    <Resource Include="Assets\example1.png" />
-    <Resource Include="Assets\example2.png" />
     <Content Include="tanvastouch.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
