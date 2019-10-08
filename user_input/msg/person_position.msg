@@ -2,4 +2,4 @@
 
 int32           xpos          # x position of the person in unity
 int32           ypos          # x position of the person in unity
-int32           theta         # orientation of person (radians clockwise postive) from the person facing in the positive y direction
+int32           theta         # orientation of person (radians clockwise positive from -pi to pi) from the person facing in the positive y direction,
