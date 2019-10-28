@@ -1,0 +1,16 @@
+
+*~
+*.pyc
+*.exe
+*.obj
+*.o
+*.cache
+*.pbd
+*.lref
+*/obj/*
+*/ARM/*
+*/x86/*
+*/x64/*
+*/Debug/*
+*/Release/*
+*/.vs/*
