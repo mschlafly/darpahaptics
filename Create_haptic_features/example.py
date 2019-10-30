@@ -142,8 +142,10 @@ for x in range(-100,W_tablet,1):
                 draw_bld_2vert(x,y,W_building_tablet,H_building_tablet,xmax,ymax,im)
 
 if (examplenum == 1):
-    im.save(name+'/TouchDetection_UWPcs/TouchDetection_UWPcs/Assets/example1.png');
+    im.save(name+'/TouchDetection/directcontrol/directcontrol/Assets/example1.png');
+    im.save(name+'/TouchDetection/sharedcontrol/sharedcontrol/Assets/example1.png');
 elif (examplenum == 2):
-    im.save(name+'/TouchDetection_UWPcs/TouchDetection_UWPcs/Assets/example2.png');
+    im.save(name+'/TouchDetection/directcontrol/directcontrol/Assets/example2.png');
+    im.save(name+'/TouchDetection/sharedcontrol/sharedcontrol/Assets/example2.png');
 
 im.show()

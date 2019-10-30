@@ -1,3 +1,5 @@
+// SHARED CONTROL
+
 //// This program reads a text file containing a string coordinates and
 //// sends the string in managable sections over a TCP socket  
 //// Meant to be used on a windows OS sending to a linux OS
@@ -23,7 +25,7 @@
 #define DEFAULT_BUFLEN 100 // Max length of string to send over TCP socket
 #define MAX_STRING 10000 // Maximum length of text file string 
  //The number of characters to save to determine if a new string has been opened
-#define MAX_STRING_SAVE_PREV 200  
+#define MAX_STRING_SAVE_PREV 100  
 #define MAX_STRING_SAVE_PREV_PERSON 50  
 
  //Set socket-specific values
@@ -38,8 +40,8 @@ using namespace std;
 #include <fstream>
 // Set up file for reading 
 //string docPath_touch = "C:/Users/brandon/Desktop/Tanvas/DARPA_hapticsandtouchdetection/touch_locations.txt";
-string docPath_touch = "C:/Users/numur/Desktop/Tanvas/darpahaptics/Haptic_display/touch_locations.txt";
-string docPath_person = "C:\\Users\\numur\\Desktop\\Tanvas\\darpahaptics\\Haptic_displays\\person_position.txt";
+string docPath_touch = "C:/Users/numur/Downloads/touch_locations.txt";
+string docPath_person = "C:\\Users\\numur\\Desktop\\Tanvas\\darpahaptics\\HapticDisplay\\person_position.txt";
 int filefetch_wait = 500; // Milliseconds between trying to open file
 
 // Global

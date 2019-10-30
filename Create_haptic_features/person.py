@@ -56,4 +56,4 @@ y=0;
 draw_person(x,y,W_person_tablet,W_person_tablet,W_person_tablet,im)
 
 im.show()
-im.save(name+'/Haptic_display/HelloTanvas/Assets/person.png');
+im.save(name+'/HapticDisplay/HelloTanvas/Assets/person.png');

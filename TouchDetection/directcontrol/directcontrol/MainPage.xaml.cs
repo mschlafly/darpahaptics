@@ -43,11 +43,9 @@ namespace directcontrol
         // Ratio for zooming
         float zoom_ratio;
 
-        int numtaps = 1;
+        int drone_number = 0;
         int previoustap_x = 0;
         int previoustap_y = 0;
-
-        bool first = true;
 
         MediaElement mysong = new MediaElement();
 
@@ -70,22 +68,16 @@ namespace directcontrol
         private async void pickfiles()
         {
 
-            System.Diagnostics.Debug.WriteLine("Pick audio file .......insert here.");
-
+            System.Diagnostics.Debug.WriteLine("Pick audio file audio_cropped.wav from Downloads folder");
             FileOpenPicker openPicker = new FileOpenPicker();
             openPicker.ViewMode = PickerViewMode.Thumbnail;
             openPicker.SuggestedStartLocation = PickerLocationId.Downloads;
             openPicker.FileTypeFilter.Add(".wav");
             StorageFile file = await openPicker.PickSingleFileAsync();
-
             var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
             mysong.SetSource(stream, file.ContentType);
 
-            ElementSoundPlayer.State = ElementSoundPlayerState.On;
-            ElementSoundPlayer.Volume = 0.5;
-
-            System.Diagnostics.Debug.WriteLine("Pick text file to write to .......insert here.");
-
+            System.Diagnostics.Debug.WriteLine("Pick text file touch_locations.txt to write to.");
             FileOpenPicker openPicker2 = new FileOpenPicker();
             openPicker2.ViewMode = PickerViewMode.Thumbnail;
             openPicker2.SuggestedStartLocation = PickerLocationId.Downloads;
@@ -96,45 +88,26 @@ namespace directcontrol
         {
             System.Diagnostics.Debug.WriteLine("Tap Detected");
 
-
             Windows.Foundation.Point currentPoint = e.GetPosition(mainCanvas);
-
-            //if (first == true)
-            //{
-            //    FileOpenPicker openPicker = new FileOpenPicker();
-            //    openPicker.ViewMode = PickerViewMode.Thumbnail;
-            //    openPicker.SuggestedStartLocation = PickerLocationId.Downloads;
-            //    openPicker.FileTypeFilter.Add(".wav");
-            //    StorageFile file = await openPicker.PickSingleFileAsync();
-
-            //    var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
-            //    mysong.SetSource(stream, file.ContentType);
-            //    first = false;
-            //} else
-            //{
-            //mysong.Play();
-            //}
-
             int range_accepted = 50;
             int current_x = Convert.ToInt32(Math.Round(currentPoint.X));
             int current_y = Convert.ToInt32(Math.Round(currentPoint.Y));
 
-
             if ((Math.Abs(previoustap_x - current_x) < range_accepted) && (Math.Abs(previoustap_y - current_y) < range_accepted))
             {
                 //System.Diagnostics.Debug.WriteLine("Near previous tap");
-
-                if (numtaps == 1)
+                if (drone_number == 0)
                 {
                     savefile();
                 }
-                numtaps = numtaps + 1; // Starts at 1 and add one every time there is one in the range
-                mysong.Play();
-            } else
-            {
-                numtaps = 1;
+                drone_number = drone_number + 1; // Starts at 1 and add one every time there is one in the range
+                mysong.Play();  // Plays audio file
             }
-            if (numtaps == 1)
+            else
+            {
+                //drone_number = 1; 
+            }
+            if (drone_number == 0)
             {
                 previoustap_x = current_x;
                 previoustap_y = current_y;
@@ -145,30 +118,23 @@ namespace directcontrol
         {
             await System.Threading.Tasks.Task.Delay(3500); //wait for 2 seconds (= 2000ms)
 
-            // translate the coordinates so that the person is at (0,0)
-            double tempx = previoustap_x - x_person_tablet;
-            double tempy = previoustap_y - y_person_tablet;
-            // scale to unity coordinate system
-            tempx = tempx / zoom_ratio;
-            tempy = tempy / zoom_ratio;
+            if ((drone_number > 0) && (drone_number < 4))
+            {
+                // If a valid number of drones            // translate the coordinates so that the person is at (0,0)
+                double tempx = previoustap_x - x_person_tablet;
+                double tempy = previoustap_y - y_person_tablet;
+                // scale to unity coordinate system
+                tempx = tempx / zoom_ratio;
+                tempy = tempy / zoom_ratio;
+                // NOTE THE REST OF THE CONVERSION HAS BEEN REMOVES AND PERFORMED AFTER SENDING OVER TCP SOCKET
+                int x_unity = Convert.ToInt32(Math.Round(tempx));
+                int y_unity = Convert.ToInt32(Math.Round(tempy));
 
-            // NOTE THE REST OF THE CONVERSION HAS BEEN REMOVES AND PERFORMED AFTER SENDING OVER TCP SOCKET
-            int x_unity = Convert.ToInt32(Math.Round(tempx));
-            int y_unity = Convert.ToInt32(Math.Round(tempy));
-
-            String string_of_coordinates = numtaps.ToString() + ',' + x_unity.ToString() + ',' + y_unity.ToString() + ',';
-
-            System.Diagnostics.Debug.WriteLine("Number of taps: {0} Position: X- {1} Y- {2}", numtaps, x_unity, y_unity);
-
-            numtaps = 1;
-
-            //if (!file_created)
-            //{
-            //    newFile = await DownloadsFolder.CreateFileAsync("touch_locations_directcontrol.txt");
-            //    file_created = true;
-            //}
-
-            await Windows.Storage.FileIO.WriteTextAsync(newFile, string_of_coordinates);
+                String string_of_coordinates = drone_number.ToString() + ',' + x_unity.ToString() + ',' + y_unity.ToString() + ',' + '!';
+                System.Diagnostics.Debug.WriteLine("Drone number: {0} Position: X- {1} Y- {2}", drone_number, x_unity, y_unity);
+                await Windows.Storage.FileIO.WriteTextAsync(newFile, string_of_coordinates);
+            }
+            drone_number = 0;
         }
     }
 }

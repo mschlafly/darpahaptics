@@ -27,7 +27,7 @@ namespace HelloTanvas
     public partial class MainWindow : Window
     {
 
-        string docPath = "C:/Users/numur/Desktop/Tanvas/darpahaptics/Haptic_display"; // Path for text files
+        string docPath = "C:/Users/numur/Desktop/Tanvas/darpahaptics/HapticDisplay"; // Path for text files
         // Time vairables for detecting double tap and input
         DateTime onetap_time = DateTime.Now;
         DateTime starttime = DateTime.Now;

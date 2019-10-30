@@ -58,4 +58,4 @@ y=0;
 draw_bld_2vert(x,y,W_building_tablet,H_building_tablet,W_building_tablet,H_building_tablet,im)
 
 im.show()
-im.save(name+'/Haptic_display/HelloTanvas/Assets/bld_2vert.png');
+im.save(name+'/HapticDisplay/HelloTanvas/Assets/bld_2vert.png');

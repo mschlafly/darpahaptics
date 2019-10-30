@@ -27,7 +27,7 @@
 
 
 #include "ros/ros.h"
-#include "user_input/input_array.h"
+#include "user_input/input_location.h"
 #include "user_input/person_position.h"
 #include "signal.h"
 
@@ -77,18 +77,18 @@ void chatterCallback(const user_input::person_position::ConstPtr& msg)
 int main(int argc , char *argv[])
 {
 // Set up ros node
-  ros::init(argc, argv, "client");
+  ros::init(argc, argv, "client_directcontrol");
   ros::NodeHandle n;
   ros::Rate rate(10.0);
 
 	// Set up publisher
-  ros::Publisher pub = n.advertise<user_input::input_array>("input", 1000);
-  user_input::input_array send_array;
+  ros::Publisher pub = n.advertise<user_input::input_location>("input_directcontrol", 1000);
+  user_input::input_location send_loc;
   // Send empty array so that the topic can be found even if no inputs have been made
-  send_array.xinput.clear();
-  send_array.yinput.clear();
-  send_array.datalen = 0;
-  pub.publish(send_array);
+  send_loc.xinput.clear();
+  send_loc.yinput.clear();
+  send_loc.datalen = 0;
+  pub.publish(send_loc);
   ros::spinOnce();
 
   // Set up Subscriber
@@ -162,113 +162,72 @@ int main(int argc , char *argv[])
 		puts(message_from_server);
 		//printf("\n");
 
-    // If the server is done sending the coordinates, publish message
     if ((message_from_server[0]=='D') &&
         (message_from_server[1]=='o') &&
         (message_from_server[2]=='n') &&
         (message_from_server[3]=='e')) {
-            // Ensure that only one message is published when done
-            if (done==0) {
-              // Check that the x and y arrays are the same length
-              if (num_values_in_message_x!=num_values_in_message_y) {
-                printf("Size of arrays are not equal \n");
-              }
-              printf("Size of x-array %d \n",num_values_in_message_x);
-              printf("Size of y-array %d \n",num_values_in_message_y);
+          // If the message is 'Done', don't do anything.
+        } else {
 
-              //printf("Size of x-array %d \n",len(send_array.xinput));
-              //printf("Size of x-array %d \n",len(send_array.yinput));
+        // Strings follow format "number of drone,x-location,y-location!"
+        //printf("New string containing coordinates \n");
+        flag_exclaim = 0; // flag for exclaimation mark
+        flag_comma = 0; // flag for comma
+        num_comma = 0; // keep track of the number of commas
+        comma_index = 0; // The string starts with the first number so the imaginary comma is at location -1
 
-              // Set array length and publish to /input
-              send_array.datalen = num_values_in_message_x;
-              pub.publish(send_array);
-              printf("Input coordinates published \n");
-
-              // Clear send_array values and set values to zero to prepare for new message
-    		      // send_array.datalen.clear();
-    		      send_array.xinput.clear();
-              send_array.yinput.clear();
-    		      //send_array.xinput={};
-              //send_array.yinput={};
-              comma_index = 0;
-              num_values_in_message_x=0;
-              num_values_in_message_y=0;
-              send_array.datalen = num_values_in_message_x;
-
-              ros::spinOnce(); // Standard line to allow services
-              sleep(1);
-
-              // Publish the empty array
-              pub.publish(send_array);
-              printf("Empty array published \n");
-
-              ros::spinOnce(); // Standard line to allow services
-              sleep(1);
+        // Iterate through the characters in latest message from server
+        for (i=0;i<MAXLEN;i++)
+    		{
+          if ((int)message_from_server[i]==33) {
+            flag_exclaim = 1;
+            printf("String ends \n");
+          }
+          if ((int)message_from_server[i]==44) {
+            flag_comma = 1;
+            flag_comma = flag_comma + 1;
+          }
+          // If reached the end of a number and the string has not been terminated, store value
+          if (flag_exclaim==0 && flag_comma ==1) {
+            // Store characters between commas into temporary string and convert to number
+            i_temp=0;
+            if (comma_index!=0)
+              comma_index=comma_index+1;
+            for (i_char=comma_index; i_char<i; i_char++) {
+              // it cuts off the first number of the first entree
+              temp_char[i_temp]=message_from_server[i_char];
+              //printf("%d \n",(int)message_from_server[i2]);
+              i_temp++;
             }
-            done = 1;
-    } else {
-      // trythis.xpos = count;
-      // trythis.ypos = 4;
-      // trythis.theta = 4;
-      // pub2.publish(trythis);
-      // printf("Published \n");
-      // ros::spinOnce();
-      // Strings follow format "x-coor,y-coor,....x-coor,y-coor,!"
-      //printf("New string containing coordinates \n");
-      flag_exclaim = 0; // flag for exclaimation mark
-      flag_comma = 0; // flag for comma
-      done = 0; // reset done flag because new set of coordinates are being sent
-      coordinate = 'x'; // string starts with x-coordinate
-      comma_index = 0; // The string starts with the first number so the imaginary comma is at location -1
+            temp_char[i_temp]='.'; // atoi recognized a '.' as indicating the end of a number
+            temp_number = atoi(temp_char); // from std package
 
-      // Iterate through the characters in latest message from server
-      for (i=0;i<MAXLEN;i++)
-  		{
-        if ((int)message_from_server[i]==33) {
-          flag_exclaim = 1;
-          printf("String ends \n");
-        }
-        if ((int)message_from_server[i]==44) {
-          flag_comma = 1;
-        }
-        // If reached the end of a number and the string has not been terminated, store value
-        if (flag_exclaim==0 && flag_comma ==1) {
-          // Store characters between commas into temporary string and convert to number
-          i_temp=0;
-          if (comma_index!=0)
-            comma_index=comma_index+1;
-          for (i_char=comma_index; i_char<i; i_char++) {
-            // it cuts off the first number of the first entree
-            temp_char[i_temp]=message_from_server[i_char];
-            //printf("%d \n",(int)message_from_server[i2]);
-            i_temp++;
-          }
-          temp_char[i_temp]='.'; // atoi recognized a '.' as indicating the end of a number
-          temp_number = atoi(temp_char); // from std package
+            // Store number into send_loc message
+            if (num_comma == 1) {
+              send_loc.dronenumber = temp_number
+            } else if (num_comma == 2) {
+              send_loc.xpos = temp_number
+            } else if (num_comma == 3) {
+              send_loc.ypos = temp_number
+            }
 
-          // Append send_array message with new value
-          // Values alternate between x and y coordinates
-          if (coordinate == 'x') {
-            temp_number = temp_number + xloc; // finish conversion, uncomment when using UWP touch program
-            send_array.xinput.push_back(temp_number); // add to message
-            //if (temp_number==0)
-              //printf(" Zero found X-coor %d \n",comma_index);
-            coordinate = 'y';
-            num_values_in_message_x++;
-          } else if (coordinate == 'y') {
-            temp_number = temp_number + (gridsize_unity - yloc); // finish conversion, uncomment when using UWP touch program
-            temp_number = gridsize_unity - temp_number; // finish conversion, uncomment when using UWP touch program
-            send_array.yinput.push_back(temp_number);
-            //if (temp_number==0)
-              //printf(" Zero found Y-coor %d \n",comma_index);
-            //printf("Store data Y\n");
-            coordinate = 'x';
-            num_values_in_message_y++;
+            comma_index=i; // Store latest comma location for use later
+            flag_comma = 0; // reset flag
           }
-          comma_index=i; // Store latest comma location for use later
-          flag_comma = 0; // reset flag
-        }
-      }
+    }
+      pub.publish(send_loc);
+      printf("Input coordinates published \n");
+      ros::spinOnce(); // Standard line to allow services
+      sleep(1);
+
+      // Publish the empty array
+      send_loc.dronenumber = 0;
+      send_loc.xpos = 0;
+      send_loc.ypos = 0;
+      pub.publish(send_loc);
+      printf("Empty array published \n");
+      ros::spinOnce(); // Standard line to allow services
+      sleep(1);
 		}
 
     // Reply to server (Later I imaging sending the location of the person here

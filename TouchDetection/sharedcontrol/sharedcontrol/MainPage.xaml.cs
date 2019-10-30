@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Windows.Storage;
 using Windows.UI.ViewManagement;
+using Windows.Storage.Pickers;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -44,12 +45,13 @@ namespace sharedcontrol
         float zoom_ratio;
 
         String string_of_coordinates = "";
+        MediaElement mysong_start = new MediaElement();
+        MediaElement mysong_end = new MediaElement();
 
         public MainPage()
         {
             this.InitializeComponent();
             ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
-            //MaximizeWindowOnLoad();
 
             // Position of person in tablet
             x_person_tablet = W_tablet / 2;
@@ -61,6 +63,34 @@ namespace sharedcontrol
             //mainCanvas.PointerPressed += new PointerEventHandler(Pointer_Pressed);
             mainCanvas.PointerMoved += new PointerEventHandler(Pointer_Moved);
             //mainCanvas.PointerReleased += new PointerEventHandler(Pointer_Released);
+            pickfiles();
+        }
+        private async void pickfiles()
+        {
+            System.Diagnostics.Debug.WriteLine("Pick audio file audio_cropped.wav from Downloads folder");
+            FileOpenPicker openPicker = new FileOpenPicker();
+            openPicker.ViewMode = PickerViewMode.Thumbnail;
+            openPicker.SuggestedStartLocation = PickerLocationId.Downloads;
+            openPicker.FileTypeFilter.Add(".wav");
+            StorageFile file = await openPicker.PickSingleFileAsync();
+            var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+            mysong_start.SetSource(stream, file.ContentType);
+
+            System.Diagnostics.Debug.WriteLine("Pick audio file end.wav from Downloads folder");
+            FileOpenPicker openPicker3 = new FileOpenPicker();
+            openPicker3.ViewMode = PickerViewMode.Thumbnail;
+            openPicker3.SuggestedStartLocation = PickerLocationId.Downloads;
+            openPicker3.FileTypeFilter.Add(".wav");
+            file = await openPicker.PickSingleFileAsync();
+            stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+            mysong_end.SetSource(stream, file.ContentType);
+
+            System.Diagnostics.Debug.WriteLine("Pick text file touch_locations.txt to write to.");
+            FileOpenPicker openPicker2 = new FileOpenPicker();
+            openPicker2.ViewMode = PickerViewMode.Thumbnail;
+            openPicker2.SuggestedStartLocation = PickerLocationId.Downloads;
+            openPicker2.FileTypeFilter.Add(".txt");
+            newFile = await openPicker2.PickSingleFileAsync();
         }
         void target_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
@@ -69,8 +99,8 @@ namespace sharedcontrol
             {
                 System.Diagnostics.Debug.WriteLine("Double Tap Detected - Saving data.");
 
+                mysong_end.Play();  // Plays audio file
                 savefile();
-
                 collectdata = false;
                 string_of_coordinates = "";
 
@@ -78,6 +108,7 @@ namespace sharedcontrol
             else
             {
                 System.Diagnostics.Debug.WriteLine("Double Tap Detected - Data collection starting now.");
+                mysong_start.Play();  // Plays audio file
                 collectdata = true;
             }
         }
@@ -95,27 +126,20 @@ namespace sharedcontrol
             {
                 // Retrieve the point associated with the current event
                 Windows.UI.Input.PointerPoint currentPoint = e.GetCurrentPoint(mainCanvas);
-
-
                 // translate the coordinates so that the person is at (0,0)
                 double tempx = currentPoint.Position.X - x_person_tablet;
                 double tempy = currentPoint.Position.X - y_person_tablet;
                 // scale to unity coordinate system
                 tempx = tempx / zoom_ratio;
                 tempy = tempy / zoom_ratio;
-
                 // NOTE THE REST OF THE CONVERSION HAS BEEN REMOVES AND PERFORMED AFTER SENDING OVER TCP SOCKET
-
-
                 int x_unity = Convert.ToInt32(Math.Round(tempx));
                 int y_unity = Convert.ToInt32(Math.Round(tempy));
 
                 string_of_coordinates = string_of_coordinates + x_unity.ToString() + ',' + y_unity.ToString() + ',';
 
                 System.Diagnostics.Debug.WriteLine("Position: X- {0} Y- {1}", x_unity, y_unity);
-
             }
-
         }
 
         //void Pointer_Released(object sender, PointerRoutedEventArgs e)
@@ -126,18 +150,18 @@ namespace sharedcontrol
         //}
         private async void savefile()
         {
-            if (!file_created)
-            {
-                try
-                {
-                    newFile = await DownloadsFolder.CreateFileAsync("touch_locations.txt");
-                }
-                catch
-                {
-                    System.Diagnostics.Debug.WriteLine("Was not able to create file. Check if it already exists in Downloads folder.");
-                }
-                file_created = true;
-            }
+            //if (!file_created)
+            //{
+            //    try
+            //    {
+            //        newFile = await DownloadsFolder.CreateFileAsync("touch_locations.txt");
+            //    }
+            //    catch
+            //    {
+            //        System.Diagnostics.Debug.WriteLine("Was not able to create file. Check if it already exists in Downloads folder.");
+            //    }
+            //    file_created = true;
+            //}
 
             await Windows.Storage.FileIO.WriteTextAsync(newFile, string_of_coordinates);
 

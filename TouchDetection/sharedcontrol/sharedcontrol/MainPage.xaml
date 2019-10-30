@@ -9,8 +9,8 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <Canvas Grid.Row="2" Name="mainCanvas" Height="Auto" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="12,10,12,12" Opacity="0.1"/>
-        <!--<Image Source="Assets/example1.png" Width="1280" Height="800" Margin="0,0,-412,-199" VerticalAlignment="Top" HorizontalAlignment="Left"/>-->
-        <!--<Button Content="Create 'sample.dat'" Margin="0,10,0,0" Click="CreateFileButton_Click"/>-->
+        <Image Source="Assets/example1.png" Width="1280" Height="800" Margin="0,0,-412,-199" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Canvas Name="mainCanvas" Height="Auto" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark" Opacity="0" />
+        <!--RequestedTheme="Dark"-->
     </Grid>
 </Page>
