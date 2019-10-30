@@ -7,11 +7,11 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="f49d101a-8aa2-4fc7-a3a4-3c1fd552c23d"
+    Name="499912b1-f938-4c31-8753-bc0bceafeacf"
     Publisher="CN=numur"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="f49d101a-8aa2-4fc7-a3a4-3c1fd552c23d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="499912b1-f938-4c31-8753-bc0bceafeacf" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>directcontrol</DisplayName>

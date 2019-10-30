@@ -13,12 +13,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-
-using System;
 using Windows.Storage;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.ViewManagement;
+using Windows.Storage.Pickers;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -31,10 +28,6 @@ namespace directcontrol
     {
         StorageFile newFile;
         bool file_created = false;
-
-        bool collectdata = false; // Boolean for whether to save the data 
-        bool doubletapended = false;
-        bool doubletapped = false;
 
 
         // Size of haptic display
@@ -50,13 +43,18 @@ namespace directcontrol
         // Ratio for zooming
         float zoom_ratio;
 
-        String string_of_coordinates = "";
+        int numtaps = 1;
+        int previoustap_x = 0;
+        int previoustap_y = 0;
+
+        bool first = true;
+
+        MediaElement mysong = new MediaElement();
 
         public MainPage()
         {
             this.InitializeComponent();
             ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
-            //MaximizeWindowOnLoad();
 
             // Position of person in tablet
             x_person_tablet = W_tablet / 2;
@@ -64,106 +62,113 @@ namespace directcontrol
             // Ratio for zooming
             zoom_ratio = H_tablet / H_unity;
 
-            mainCanvas.PointerPressed += new PointerEventHandler(Pointer_Pressed);
-            mainCanvas.PointerMoved += new PointerEventHandler(Pointer_Moved);
-            mainCanvas.PointerReleased += new PointerEventHandler(Pointer_Released);
-            mainCanvas.DoubleTapped += new DoubleTappedEventHandler(target_DoubleTapped);
 
+            mainCanvas.Tapped += new TappedEventHandler(target_Tapped);
+
+            pickfiles();
         }
-
-        //private static void MaximizeWindowOnLoad()
-        //{
-        //    ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
-        //}
-
-        void target_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        private async void pickfiles()
         {
 
-            if (collectdata == true)
+            System.Diagnostics.Debug.WriteLine("Pick audio file .......insert here.");
+
+            FileOpenPicker openPicker = new FileOpenPicker();
+            openPicker.ViewMode = PickerViewMode.Thumbnail;
+            openPicker.SuggestedStartLocation = PickerLocationId.Downloads;
+            openPicker.FileTypeFilter.Add(".wav");
+            StorageFile file = await openPicker.PickSingleFileAsync();
+
+            var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+            mysong.SetSource(stream, file.ContentType);
+
+            ElementSoundPlayer.State = ElementSoundPlayerState.On;
+            ElementSoundPlayer.Volume = 0.5;
+
+            System.Diagnostics.Debug.WriteLine("Pick text file to write to .......insert here.");
+
+            FileOpenPicker openPicker2 = new FileOpenPicker();
+            openPicker2.ViewMode = PickerViewMode.Thumbnail;
+            openPicker2.SuggestedStartLocation = PickerLocationId.Downloads;
+            openPicker2.FileTypeFilter.Add(".txt");
+            newFile = await openPicker2.PickSingleFileAsync();
+        }
+        async void target_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Tap Detected");
+
+
+            Windows.Foundation.Point currentPoint = e.GetPosition(mainCanvas);
+
+            //if (first == true)
+            //{
+            //    FileOpenPicker openPicker = new FileOpenPicker();
+            //    openPicker.ViewMode = PickerViewMode.Thumbnail;
+            //    openPicker.SuggestedStartLocation = PickerLocationId.Downloads;
+            //    openPicker.FileTypeFilter.Add(".wav");
+            //    StorageFile file = await openPicker.PickSingleFileAsync();
+
+            //    var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+            //    mysong.SetSource(stream, file.ContentType);
+            //    first = false;
+            //} else
+            //{
+            //mysong.Play();
+            //}
+
+            int range_accepted = 50;
+            int current_x = Convert.ToInt32(Math.Round(currentPoint.X));
+            int current_y = Convert.ToInt32(Math.Round(currentPoint.Y));
+
+
+            if ((Math.Abs(previoustap_x - current_x) < range_accepted) && (Math.Abs(previoustap_y - current_y) < range_accepted))
             {
-                System.Diagnostics.Debug.WriteLine("Double Tap Detected - Saving data.");
+                //System.Diagnostics.Debug.WriteLine("Near previous tap");
 
-                savefile();
-
-                collectdata = false;
-                string_of_coordinates = "";
-
-            }
-            else
+                if (numtaps == 1)
+                {
+                    savefile();
+                }
+                numtaps = numtaps + 1; // Starts at 1 and add one every time there is one in the range
+                mysong.Play();
+            } else
             {
-                System.Diagnostics.Debug.WriteLine("Double Tap Detected - Data collection starting now.");
-                collectdata = true;
+                numtaps = 1;
             }
-        }
-
-        void Pointer_Pressed(object sender, PointerRoutedEventArgs e)
-        {
-            //Windows.UI.Input.PointerPoint currentPoint = e.GetCurrentPoint(mainCanvas);
-        }
-
-        void Pointer_Moved(object sender, PointerRoutedEventArgs e)
-        {
-
-            if (collectdata == true)
+            if (numtaps == 1)
             {
-                // Retrieve the point associated with the current event
-                Windows.UI.Input.PointerPoint currentPoint = e.GetCurrentPoint(mainCanvas);
-
-
-                // translate the coordinates so that the person is at (0,0)
-                double tempx = currentPoint.Position.X - x_person_tablet;
-                double tempy = currentPoint.Position.X - y_person_tablet;
-                // scale to unity coordinate system
-                tempx = tempx / zoom_ratio;
-                tempy = tempy / zoom_ratio;
-
-                // NOTE THE REST OF THE CONVERSION HAS BEEN REMOVES AND PERFORMED AFTER SENDING OVER TCP SOCKET
-
-
-                int x_unity = Convert.ToInt32(Math.Round(tempx));
-                int y_unity = Convert.ToInt32(Math.Round(tempy));
-
-                string_of_coordinates = string_of_coordinates + x_unity.ToString() + ',' + y_unity.ToString() + ',';
-
-                System.Diagnostics.Debug.WriteLine("Position: X- {0} Y- {1}", x_unity, y_unity);
-
+                previoustap_x = current_x;
+                previoustap_y = current_y;
             }
-
         }
-
-        void Pointer_Released(object sender, PointerRoutedEventArgs e)
-        {
-            // Retrieve the point associated with the current event
-            //Windows.UI.Input.PointerPoint currentPoint = e.GetCurrentPoint(mainCanvas);
-
-        }
-
 
         private async void savefile()
         {
-            if (!file_created)
-            {
+            await System.Threading.Tasks.Task.Delay(3500); //wait for 2 seconds (= 2000ms)
 
-                newFile = await DownloadsFolder.CreateFileAsync("touch_locations.txt");
-                file_created = true;
-            }
+            // translate the coordinates so that the person is at (0,0)
+            double tempx = previoustap_x - x_person_tablet;
+            double tempy = previoustap_y - y_person_tablet;
+            // scale to unity coordinate system
+            tempx = tempx / zoom_ratio;
+            tempy = tempy / zoom_ratio;
+
+            // NOTE THE REST OF THE CONVERSION HAS BEEN REMOVES AND PERFORMED AFTER SENDING OVER TCP SOCKET
+            int x_unity = Convert.ToInt32(Math.Round(tempx));
+            int y_unity = Convert.ToInt32(Math.Round(tempy));
+
+            String string_of_coordinates = numtaps.ToString() + ',' + x_unity.ToString() + ',' + y_unity.ToString() + ',';
+
+            System.Diagnostics.Debug.WriteLine("Number of taps: {0} Position: X- {1} Y- {2}", numtaps, x_unity, y_unity);
+
+            numtaps = 1;
+
+            //if (!file_created)
+            //{
+            //    newFile = await DownloadsFolder.CreateFileAsync("touch_locations_directcontrol.txt");
+            //    file_created = true;
+            //}
 
             await Windows.Storage.FileIO.WriteTextAsync(newFile, string_of_coordinates);
-
         }
-
-        //private async void CreateFileButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (!file_created)
-        //    {
-
-        //        newFile = await DownloadsFolder.CreateFileAsync("file.txt");
-        //        file_created = true;
-        //    }
-
-        //    await Windows.Storage.FileIO.WriteTextAsync(newFile, "Swift as a shadow");
-        //    await Windows.Storage.FileIO.WriteTextAsync(newFile, "Fast as a bird");
-
-        //}
     }
 }

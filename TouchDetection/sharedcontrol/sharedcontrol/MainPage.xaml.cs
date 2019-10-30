@@ -13,11 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-
-using System;
 using Windows.Storage;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.ViewManagement;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -29,13 +25,10 @@ namespace sharedcontrol
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
         StorageFile newFile;
         bool file_created = false;
-
         bool collectdata = false; // Boolean for whether to save the data 
-        bool doubletapended = false;
-        bool doubletapped = false;
-
 
         // Size of haptic display
         int W_tablet = 1280; //738;
@@ -56,7 +49,7 @@ namespace sharedcontrol
         {
             this.InitializeComponent();
             ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
-        //MaximizeWindowOnLoad();
+            //MaximizeWindowOnLoad();
 
             // Position of person in tablet
             x_person_tablet = W_tablet / 2;
@@ -64,18 +57,11 @@ namespace sharedcontrol
             // Ratio for zooming
             zoom_ratio = H_tablet / H_unity;
 
-            mainCanvas.PointerPressed += new PointerEventHandler(Pointer_Pressed);
-            mainCanvas.PointerMoved += new PointerEventHandler(Pointer_Moved);
-            mainCanvas.PointerReleased += new PointerEventHandler(Pointer_Released);
             mainCanvas.DoubleTapped += new DoubleTappedEventHandler(target_DoubleTapped);
-
+            //mainCanvas.PointerPressed += new PointerEventHandler(Pointer_Pressed);
+            mainCanvas.PointerMoved += new PointerEventHandler(Pointer_Moved);
+            //mainCanvas.PointerReleased += new PointerEventHandler(Pointer_Released);
         }
-
-        //private static void MaximizeWindowOnLoad()
-        //{
-        //    ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
-        //}
-
         void target_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
 
@@ -96,10 +82,11 @@ namespace sharedcontrol
             }
         }
 
-        void Pointer_Pressed(object sender, PointerRoutedEventArgs e)
-        {
-            //Windows.UI.Input.PointerPoint currentPoint = e.GetCurrentPoint(mainCanvas);
-        }
+
+        //void Pointer_Pressed(object sender, PointerRoutedEventArgs e)
+        //{
+        //    //Windows.UI.Input.PointerPoint currentPoint = e.GetCurrentPoint(mainCanvas);
+        //}
 
         void Pointer_Moved(object sender, PointerRoutedEventArgs e)
         {
@@ -131,39 +118,29 @@ namespace sharedcontrol
 
         }
 
-        void Pointer_Released(object sender, PointerRoutedEventArgs e)
-        {
-            // Retrieve the point associated with the current event
-            //Windows.UI.Input.PointerPoint currentPoint = e.GetCurrentPoint(mainCanvas);
+        //void Pointer_Released(object sender, PointerRoutedEventArgs e)
+        //{
+        //    // Retrieve the point associated with the current event
+        //    //Windows.UI.Input.PointerPoint currentPoint = e.GetCurrentPoint(mainCanvas);
 
-        }
-
-
+        //}
         private async void savefile()
         {
             if (!file_created)
             {
-
-                newFile = await DownloadsFolder.CreateFileAsync("touch_locations.txt");
+                try
+                {
+                    newFile = await DownloadsFolder.CreateFileAsync("touch_locations.txt");
+                }
+                catch
+                {
+                    System.Diagnostics.Debug.WriteLine("Was not able to create file. Check if it already exists in Downloads folder.");
+                }
                 file_created = true;
             }
 
             await Windows.Storage.FileIO.WriteTextAsync(newFile, string_of_coordinates);
 
         }
-
-        //private async void CreateFileButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (!file_created)
-        //    {
-
-        //        newFile = await DownloadsFolder.CreateFileAsync("file.txt");
-        //        file_created = true;
-        //    }
-
-        //    await Windows.Storage.FileIO.WriteTextAsync(newFile, "Swift as a shadow");
-        //    await Windows.Storage.FileIO.WriteTextAsync(newFile, "Fast as a bird");
-
-        //}
     }
 }
