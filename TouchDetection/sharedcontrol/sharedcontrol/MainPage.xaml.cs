@@ -17,8 +17,6 @@ using Windows.Storage;
 using Windows.UI.ViewManagement;
 using Windows.Storage.Pickers;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
-
 namespace sharedcontrol
 {
     /// <summary>
@@ -67,7 +65,7 @@ namespace sharedcontrol
         }
         private async void pickfiles()
         {
-            System.Diagnostics.Debug.WriteLine("Pick audio file audio_cropped.wav from Downloads folder");
+            System.Diagnostics.Debug.WriteLine("Pick audio file sound1.wav from Downloads folder");
             FileOpenPicker openPicker = new FileOpenPicker();
             openPicker.ViewMode = PickerViewMode.Thumbnail;
             openPicker.SuggestedStartLocation = PickerLocationId.Downloads;
@@ -76,7 +74,7 @@ namespace sharedcontrol
             var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
             mysong_start.SetSource(stream, file.ContentType);
 
-            System.Diagnostics.Debug.WriteLine("Pick audio file end.wav from Downloads folder");
+            System.Diagnostics.Debug.WriteLine("Pick audio file sound2.wav from Downloads folder");
             FileOpenPicker openPicker3 = new FileOpenPicker();
             openPicker3.ViewMode = PickerViewMode.Thumbnail;
             openPicker3.SuggestedStartLocation = PickerLocationId.Downloads;

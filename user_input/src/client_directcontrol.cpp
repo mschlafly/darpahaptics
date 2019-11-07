@@ -206,9 +206,21 @@ int main(int argc , char *argv[])
             if (num_comma == 1) {
               send_loc.dronenumber = temp_number
             } else if (num_comma == 2) {
-              send_loc.xpos = temp_number
+              if (temp_number<0){
+                send_loc.xpos = 0;
+              } else if (temp_number>29) {
+                send_loc.xpos = 29;
+              } else {
+                send_loc.xpos = temp_number
+              }
             } else if (num_comma == 3) {
-              send_loc.ypos = temp_number
+              if (temp_number<0){
+                send_loc.ypos = 0;
+              } else if (temp_number>29) {
+                send_loc.ypos = 29;
+              } else {
+                send_loc.ypos = temp_number
+              }
             }
 
             comma_index=i; // Store latest comma location for use later

@@ -250,7 +250,9 @@ int main(int argc , char *argv[])
           // Values alternate between x and y coordinates
           if (coordinate == 'x') {
             temp_number = temp_number + xloc; // finish conversion, uncomment when using UWP touch program
-            send_array.xinput.push_back(temp_number); // add to message
+            if ((temp_number>=0) && (temp_number<=29)){
+                send_array.xinput.push_back(temp_number); // add to message
+            }
             //if (temp_number==0)
               //printf(" Zero found X-coor %d \n",comma_index);
             coordinate = 'y';
@@ -258,7 +260,9 @@ int main(int argc , char *argv[])
           } else if (coordinate == 'y') {
             temp_number = temp_number + (gridsize_unity - yloc); // finish conversion, uncomment when using UWP touch program
             temp_number = gridsize_unity - temp_number; // finish conversion, uncomment when using UWP touch program
-            send_array.yinput.push_back(temp_number);
+            if ((temp_number>=0) && (temp_number<=29)){
+                send_array.yinput.push_back(temp_number);
+            }
             //if (temp_number==0)
               //printf(" Zero found Y-coor %d \n",comma_index);
             //printf("Store data Y\n");

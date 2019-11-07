@@ -3,5 +3,5 @@
 
 #MultiArrayLayout  layout        # specification of data layout
 int32             datalen          # int for length of data
-int32[]           xinput          # array of data
-int32[]           yinput          # array of data
+float32[]           xinput          # array of data
+float32[]           yinput          # array of data
