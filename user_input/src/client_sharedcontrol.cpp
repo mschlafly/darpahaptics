@@ -43,19 +43,19 @@ int flag_comma = 0;
 char coordinate;
 char temp_char[6];
 int temp_number;
+float temp_x, temp_y;
 int i, i_temp, i_char;
 
 // Set values to 0 to prepare for the start of input
-int num_values_in_message_x=0;
-int num_values_in_message_y=0;
+int num_values_in_message=0;
 int comma_index = 0;
 int done = 0;
 
 using namespace std;
 // Define global variables for postition of person_location
-string xloc = "";
-string yloc = "";
-string th = "";
+int xloc;
+int yloc;
+float th;
 string location_string = "?";
 char location_chararray[MAXLEN];
 
@@ -64,13 +64,10 @@ int gridsize_unity = 30;
 void chatterCallback(const user_input::person_position::ConstPtr& msg)
 {
   printf("Updating the person's position\n");
-  xloc = to_string(msg->xpos);
-  yloc = to_string(msg->ypos);
-  th = to_string(msg->theta);
-  //yloc = msg->ypos;
-  //th = msg->theta;
-  //location_string = "";
-  location_string = xloc + "," + yloc + "," + th + "," + "!";
+  xloc = msg->xpos;
+  yloc = msg->ypos;
+  th = msg->theta;
+  location_string = to_string(xloc) + "," + to_string(yloc) + "," + to_string(th) + "," + "!";
   //printf("location_string %s \n",location_string);
 }
 
@@ -169,18 +166,13 @@ int main(int argc , char *argv[])
         (message_from_server[3]=='e')) {
             // Ensure that only one message is published when done
             if (done==0) {
-              // Check that the x and y arrays are the same length
-              if (num_values_in_message_x!=num_values_in_message_y) {
-                printf("Size of arrays are not equal \n");
-              }
-              printf("Size of x-array %d \n",num_values_in_message_x);
-              printf("Size of y-array %d \n",num_values_in_message_y);
+              printf("Size of array %d \n",num_values_in_message);
 
               //printf("Size of x-array %d \n",len(send_array.xinput));
               //printf("Size of x-array %d \n",len(send_array.yinput));
 
               // Set array length and publish to /input
-              send_array.datalen = num_values_in_message_x;
+              send_array.datalen = num_values_in_message;
               pub.publish(send_array);
               printf("Input coordinates published \n");
 
@@ -191,9 +183,8 @@ int main(int argc , char *argv[])
     		      //send_array.xinput={};
               //send_array.yinput={};
               comma_index = 0;
-              num_values_in_message_x=0;
-              num_values_in_message_y=0;
-              send_array.datalen = num_values_in_message_x;
+              num_values_in_message=0;
+              send_array.datalen = num_values_in_message;
 
               ros::spinOnce(); // Standard line to allow services
               sleep(1);
@@ -249,25 +240,28 @@ int main(int argc , char *argv[])
           // Append send_array message with new value
           // Values alternate between x and y coordinates
           if (coordinate == 'x') {
-            temp_number = temp_number + xloc; // finish conversion, uncomment when using UWP touch program
-            if ((temp_number>=0) && (temp_number<=29)){
-                send_array.xinput.push_back(temp_number); // add to message
-            }
-            //if (temp_number==0)
-              //printf(" Zero found X-coor %d \n",comma_index);
+            temp_x = temp_number;
             coordinate = 'y';
-            num_values_in_message_x++;
           } else if (coordinate == 'y') {
-            temp_number = temp_number + (gridsize_unity - yloc); // finish conversion, uncomment when using UWP touch program
-            temp_number = gridsize_unity - temp_number; // finish conversion, uncomment when using UWP touch program
-            if ((temp_number>=0) && (temp_number<=29)){
+
+            // The points recieved here are in relative the the person's position
+            // and direction in a unity's scale
+
+            // Rotate backwards relative to person
+            temp_y = temp_number;
+            float temp_x2 = temp_x*cos(-th)-temp_y*sin(-th);
+            float temp_y2 = temp_x*sin(-th)+temp_y*cos(-th);
+            // Find absolute coordinates not relative
+            int temp_x3 = round(temp_x2 + xloc);
+            temp_y2 = temp_y2 + (gridsize_unity - yloc); // finish conversion, uncomment when using UWP touch program
+            int temp_y3 = round(gridsize_unity - temp_y2); // finish conversion, uncomment when using UWP touch program
+
+            if ((temp_x3>=0) && (temp_x3<=29) && (temp_y3>=0) && (temp_y3<=29)){
+                send_array.xinput.push_back(temp_number); // add to message
                 send_array.yinput.push_back(temp_number);
+                num_values_in_message++;
             }
-            //if (temp_number==0)
-              //printf(" Zero found Y-coor %d \n",comma_index);
-            //printf("Store data Y\n");
             coordinate = 'x';
-            num_values_in_message_y++;
           }
           comma_index=i; // Store latest comma location for use later
           flag_comma = 0; // reset flag

@@ -42,7 +42,8 @@ int flag_exclaim = 0;
 int flag_comma = 0;
 char coordinate;
 char temp_char[6];
-int temp_number;
+int temp_number, num_comma;
+float temp_x, temp_y;
 int i, i_temp, i_char;
 
 // Set values to 0 to prepare for the start of input
@@ -53,9 +54,9 @@ int done = 0;
 
 using namespace std;
 // Define global variables for postition of person_location
-string xloc = "";
-string yloc = "";
-string th = "";
+int xloc;
+int yloc;
+float th;
 string location_string = "?";
 char location_chararray[MAXLEN];
 
@@ -64,13 +65,10 @@ int gridsize_unity = 30;
 void chatterCallback(const user_input::person_position::ConstPtr& msg)
 {
   printf("Updating the person's position\n");
-  xloc = to_string(msg->xpos);
-  yloc = to_string(msg->ypos);
-  th = to_string(msg->theta);
-  //yloc = msg->ypos;
-  //th = msg->theta;
-  //location_string = "";
-  location_string = xloc + "," + yloc + "," + th + "," + "!";
+  xloc = msg->xpos;
+  yloc = msg->ypos;
+  th = msg->theta;
+  location_string = to_string(xloc) + "," + to_string(yloc) + "," + to_string(th) + "," + "!";
   //printf("location_string %s \n",location_string);
 }
 
@@ -85,9 +83,9 @@ int main(int argc , char *argv[])
   ros::Publisher pub = n.advertise<user_input::input_location>("input_directcontrol", 1000);
   user_input::input_location send_loc;
   // Send empty array so that the topic can be found even if no inputs have been made
-  send_loc.xinput.clear();
-  send_loc.yinput.clear();
-  send_loc.datalen = 0;
+  send_loc.xpos = 0;
+  send_loc.ypos = 0;
+  send_loc.dronenumber = 100;
   pub.publish(send_loc);
   ros::spinOnce();
 
@@ -204,22 +202,37 @@ int main(int argc , char *argv[])
 
             // Store number into send_loc message
             if (num_comma == 1) {
-              send_loc.dronenumber = temp_number
+              send_loc.dronenumber = temp_number;
             } else if (num_comma == 2) {
-              if (temp_number<0){
+              temp_x = temp_number;
+            } else if (num_comma == 3) {
+              // The points recieved here are in relative the the person's position
+              // and direction in a unity's scale
+
+              // Rotate backwards relative to person
+              temp_y = temp_number;
+              float temp_x2 = temp_x*cos(-th)-temp_y*sin(-th);
+              float temp_y2 = temp_x*sin(-th)+temp_y*cos(-th);
+              // Find absolute coordinates not relative
+              int temp_x3 = round(temp_x2 + xloc);
+              temp_y2 = temp_y2 + (gridsize_unity - yloc); // finish conversion, uncomment when using UWP touch program
+              int temp_y3 = round(gridsize_unity - temp_y2); // finish conversion, uncomment when using UWP touch program
+
+              // Store values, saturating them to edge of the grid
+              if (temp_x3<0){
                 send_loc.xpos = 0;
-              } else if (temp_number>29) {
+              } else if (temp_x3>29) {
                 send_loc.xpos = 29;
               } else {
-                send_loc.xpos = temp_number
+                send_loc.xpos = temp_x3;
               }
-            } else if (num_comma == 3) {
-              if (temp_number<0){
+
+              if (temp_y3<0){
                 send_loc.ypos = 0;
-              } else if (temp_number>29) {
+              } else if (temp_y3>29) {
                 send_loc.ypos = 29;
               } else {
-                send_loc.ypos = temp_number
+                send_loc.ypos = temp_y3;
               }
             }
 
