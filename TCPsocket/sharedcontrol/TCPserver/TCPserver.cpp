@@ -38,10 +38,9 @@ using namespace std;
 #include <string>
 #include <iostream>
 #include <fstream>
-// Set up file for reading 
-//string docPath_touch = "C:/Users/brandon/Desktop/Tanvas/DARPA_hapticsandtouchdetection/touch_locations.txt";
+// Set up file for reading - if not working, maybe try replacing the '/' with '\\'
 string docPath_touch = "C:/Users/numur/Downloads/touch_locations.txt";
-string docPath_person = "C:\\Users\\numur\\Desktop\\Tanvas\\darpahaptics\\HapticDisplay\\person_position.txt";
+string docPath_person = "C:/Users/numur/Desktop/darpa/darpahaptics/HapticDisplay/person_position.txt";
 int filefetch_wait = 500; // Milliseconds between trying to open file
 
 // Global
@@ -349,7 +348,7 @@ int __cdecl main(void)
 			// Send "Done" message after the entire string has been sent
 		//printf("Done \n");
 
-		//printf("sending \n");
+		// printf("Send done message \n");
 		iSendResult = send(ClientSocket, "Done", 5, 0);
 		if (iSendResult == SOCKET_ERROR) {
 			printf("send failed with error: %d\n", WSAGetLastError());

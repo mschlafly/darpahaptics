@@ -34,7 +34,7 @@ namespace sharedcontrol
         int H_tablet = 780; //1024;
 
         // Distance in the unity environment to show on tablet (for height)
-        int H_unity = 10;
+        int H_unity = 30;
 
         // Position of person in tablet
         int x_person_tablet;
@@ -126,7 +126,7 @@ namespace sharedcontrol
                 Windows.UI.Input.PointerPoint currentPoint = e.GetCurrentPoint(mainCanvas);
                 // translate the coordinates so that the person is at (0,0)
                 double tempx = currentPoint.Position.X - x_person_tablet;
-                double tempy = currentPoint.Position.X - y_person_tablet;
+                double tempy = currentPoint.Position.Y - y_person_tablet;
                 // scale to unity coordinate system
                 tempx = tempx / zoom_ratio;
                 tempy = tempy / zoom_ratio;

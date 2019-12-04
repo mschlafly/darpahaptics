@@ -27,7 +27,7 @@ namespace HelloTanvas
     public partial class MainWindow : Window
     {
 
-        string docPath = "C:/Users/numur/Desktop/Tanvas/darpahaptics/HapticDisplay"; // Path for text files
+        string docPath = "C:/Users/numur/Desktop/darpa/darpahaptics/HapticDisplay"; // Path for text files
         // Time vairables for detecting double tap and input
         DateTime onetap_time = DateTime.Now;
         DateTime starttime = DateTime.Now;
@@ -359,8 +359,9 @@ namespace HelloTanvas
                 }
 
                 i = 0;
+                inputstring = person_position_string.Length;
                 strings_equal = (person_position_string_prev[i] == person_position_string[i]);
-                while (strings_equal && (i < MAX_STRING_SAVE_PREV))
+                while (strings_equal && (i < inputstring))
                 {
                     strings_equal = (strings_equal && (person_position_string_prev[i] == person_position_string[i]));
                     i++;
@@ -368,12 +369,11 @@ namespace HelloTanvas
                 }
                 if (strings_equal)
                 {
-                    Console.WriteLine("Strings equal");
+                    // Console.WriteLine("Strings equal");
                 }
                 else
                 {
                     // Update Tanvas
-                    inputstring = person_position_string.Length;
                     temp_string = "";
                     j = 0;
                     k = 0;
@@ -410,11 +410,16 @@ namespace HelloTanvas
                             temp_string = "";
                             j = 0;
                         }
-                        else // Store the next vaue in string
+                        else // Store the next value in string
                         {
                             temp_string = temp_string + person_position_string[i];
                             //j++;
                         }
+                    }
+                    // Save as new previous string
+                    for (i = 0; i < inputstring; i++)
+                    {
+                        person_position_string_prev[i] = person_position_string[i];
                     }
 
                     ///////////////////////////////////////////////////////////////////////////////////////

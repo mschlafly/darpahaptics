@@ -53,9 +53,9 @@ int done = 0;
 
 using namespace std;
 // Define global variables for postition of person_location
-int xloc;
-int yloc;
-float th;
+int xloc = 15;
+int yloc = 15;
+float th = 0;
 string location_string = "?";
 char location_chararray[MAXLEN];
 
@@ -156,7 +156,7 @@ int main(int argc , char *argv[])
 		}
 
     // Print message
-		puts(message_from_server);
+		//	puts(message_from_server);
 		//printf("\n");
 
     // If the server is done sending the coordinates, publish message
@@ -236,12 +236,14 @@ int main(int argc , char *argv[])
           }
           temp_char[i_temp]='.'; // atoi recognized a '.' as indicating the end of a number
           temp_number = atoi(temp_char); // from std package
-
+          //printf( "temp_number: %d \n", temp_number);
+          
           // Append send_array message with new value
           // Values alternate between x and y coordinates
           if (coordinate == 'x') {
             temp_x = temp_number;
             coordinate = 'y';
+            //printf("coordinate x found %f \n", temp_x);
           } else if (coordinate == 'y') {
 
             // The points recieved here are in relative the the person's position
@@ -249,17 +251,24 @@ int main(int argc , char *argv[])
 
             // Rotate backwards relative to person
             temp_y = temp_number;
+            // xloc = 15;
+            // yloc = 15;
+            // th = 0.0f;
+            //printf("coordinate y found %f \n", temp_y);
             float temp_x2 = temp_x*cos(-th)-temp_y*sin(-th);
             float temp_y2 = temp_x*sin(-th)+temp_y*cos(-th);
             // Find absolute coordinates not relative
             int temp_x3 = round(temp_x2 + xloc);
             temp_y2 = temp_y2 + (gridsize_unity - yloc); // finish conversion, uncomment when using UWP touch program
             int temp_y3 = round(gridsize_unity - temp_y2); // finish conversion, uncomment when using UWP touch program
+            printf("Transformed coordinates- x: %d y: %d \n",temp_x3,temp_y3);
 
             if ((temp_x3>=0) && (temp_x3<=29) && (temp_y3>=0) && (temp_y3<=29)){
                 send_array.xinput.push_back(temp_number); // add to message
                 send_array.yinput.push_back(temp_number);
                 num_values_in_message++;
+		        printf("adds values to message- x: %d y: %d \n ",temp_x3,temp_y3);
+		 
             }
             coordinate = 'x';
           }
