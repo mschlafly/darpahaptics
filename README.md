@@ -19,8 +19,9 @@ For networking, both the TCP server and client must be connected to the same rou
 To set up the haptic tablet, follow the tanvas instructions. Note that the haptic tablet screen must be set to be the main monitor, however, you should only need to set it once. 
 
 0. Open the tanvas engine application and calibrate monitor by pressing "Calibrate". 
-1. Edit file path variables at the top of programs 1-3. 
-2. Connect to static IP, disable security (on Dell laptop using Mcafee application), check IP address and port at the top of the TCP programs. 
+1. Edit file path variables at the top of programs 1-3 and edit the IP address and port at the top of programs 3 and 4.
+2. Disable firewall (on Dell laptop using Mcafee application)
+3. Connect to static IP: connect to private network (in our case Netgear04-5G), turn off firewall (on Dell laptop using Mcafee application), set static IP by going to the control panel, clicking "Network settings and tasks" then "Chage adapter settings", left click on "Wi-Fi" and select "Properties", "Internet Protocol version 4 TCP/IPv4", then "Properties" again. Select "Use the following IP address" and set the IP address to the one used at the top of the TCP socket code (192.168.1.3 in our case) and the subnet mask should auto full to 255.255.255.0.
 3. Open the solution file (ending in .sln) for programs 1-3 on the laptop and run in no particular order by clicking the play button in VS.
 4. Run the client side of the TCP socket (program 4) within ROS.
 
