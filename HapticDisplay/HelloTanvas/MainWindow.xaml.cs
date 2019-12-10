@@ -114,7 +114,7 @@ namespace HelloTanvas
         TTexture bld_2vert_texture;
         TMaterial bld_2vert_material;
         TView myView;
-        int tanvas_ydir_offset = 30; //30;
+        int tanvas_ydir_offset = 0; //30;
 
         public MainWindow()
         {
@@ -139,8 +139,8 @@ namespace HelloTanvas
             // Ratio for zooming
             zoom_ratio = H_tablet / H_unity;
             // Starting position of person for initialization
-            x_person_unity = 23f;
-            y_person_unity = 9f;
+            x_person_unity = 7f;
+            y_person_unity = 14f;
             th_person = 0f;
             //x_person_unity = 23f;
             //y_person_unity = 9f;
@@ -197,6 +197,7 @@ namespace HelloTanvas
             int i;
             for (i = 0; i < num_bld_small; i++)
             {
+                bld_small_y_unity[i] = bld_small_y_unity[i] + 1;
                 Tuple<int, int> result = unitytotanvas(bld_small_x_unity[i], bld_small_y_unity[i], x_person_unity, y_person_unity, zoom_ratio);
                 bld_small_x_tablet[i] = result.Item1;
                 bld_small_y_tablet[i] = result.Item2;
@@ -235,6 +236,7 @@ namespace HelloTanvas
             // Starting locations
             for (i = 0; i < num_bld_large; i++)
             {
+                bld_large_y_unity[i] = bld_large_y_unity[i] + 1;
                 Tuple<int, int> result = unitytotanvas(bld_large_x_unity[i], bld_large_y_unity[i], x_person_unity, y_person_unity, zoom_ratio);
                 bld_large_x_tablet[i] = result.Item1;
                 bld_large_y_tablet[i] = result.Item2;
@@ -273,6 +275,7 @@ namespace HelloTanvas
             // Starting locations
             for (i = 0; i < num_bld_2horiz; i++)
             {
+                bld_2horiz_y_unity[i] = bld_2horiz_y_unity[i] + 1;
                 Tuple<int, int> result = unitytotanvas(bld_2horiz_x_unity[i], bld_2horiz_y_unity[i], x_person_unity, y_person_unity, zoom_ratio);
                 bld_2horiz_x_tablet[i] = result.Item1;
                 bld_2horiz_y_tablet[i] = result.Item2;
@@ -311,6 +314,7 @@ namespace HelloTanvas
             // Starting locations
             for (i = 0; i < num_bld_2vert; i++)
             {
+                bld_2vert_y_unity[i] = bld_2vert_y_unity[i] + 1;
                 Tuple<int, int> result = unitytotanvas(bld_2vert_x_unity[i], bld_2vert_y_unity[i], x_person_unity, y_person_unity, zoom_ratio);
                 bld_2vert_x_tablet[i] = result.Item1;
                 bld_2vert_y_tablet[i] = result.Item2;
@@ -341,9 +345,9 @@ namespace HelloTanvas
             int MAX_STRING_SAVE_PREV = 50;
             char[] person_position_string_prev = new char[MAX_STRING_SAVE_PREV];
             bool strings_equal;
-            int inputstring;
+            int inputstringlen;
             string temp_string;
-            int j, k, temp_int;
+            int j, k;
             float temp_float;
             int radius_squared = (W_tablet / 2) ^ 2 + (H_tablet / 2) ^ 2;
             do
@@ -359,9 +363,9 @@ namespace HelloTanvas
                 }
 
                 i = 0;
-                inputstring = person_position_string.Length;
+                inputstringlen = person_position_string.Length;
                 strings_equal = (person_position_string_prev[i] == person_position_string[i]);
-                while (strings_equal && (i < inputstring))
+                while (strings_equal && (i < inputstringlen))
                 {
                     strings_equal = (strings_equal && (person_position_string_prev[i] == person_position_string[i]));
                     i++;
@@ -380,7 +384,7 @@ namespace HelloTanvas
                     // i iterates through characters in file string
                     // is j needed?
                     // k indicated how many numbers have been read to indicate xposition, yposition, and orientation
-                    for (i = 0; i < inputstring; i++)
+                    for (i = 0; i < inputstringlen; i++)
                     {
                         //System.Diagnostics.Debug.WriteLine(person_position_string[i]);
                         if (person_position_string[i] == ',')
@@ -388,23 +392,24 @@ namespace HelloTanvas
                             temp_string = temp_string + '\0';
                             if (k == 0)
                             {
-                                temp_int = Convert.ToInt32(temp_string);
-                                x_person_unity = temp_int;
-                                System.Diagnostics.Debug.WriteLine("Person X position: {0}", temp_int);
+
+                                temp_float = float.Parse(temp_string);
+                                x_person_unity = temp_float / 100;
+                                System.Diagnostics.Debug.WriteLine("Person X position: {0}", x_person_unity);
                                 k++;
                             }
                             else if (k == 1)
                             {
-                                temp_int = Convert.ToInt32(temp_string);
-                                y_person_unity = temp_int;
-                                System.Diagnostics.Debug.WriteLine("Person Y position: {0}", temp_int);
+                                temp_float = float.Parse(temp_string);
+                                y_person_unity = temp_float / 100;
+                                System.Diagnostics.Debug.WriteLine("Person Y position: {0}", y_person_unity);
                                 k++;
                             }
                             else if (k == 2)
                             {
                                 temp_float = float.Parse(temp_string);
-                                th_person = temp_float;
-                                System.Diagnostics.Debug.WriteLine("Person Theta position: {0}", temp_float);
+                                th_person = - temp_float / 1000; // make negative because the sprites take counterclockwise in radians 
+                                System.Diagnostics.Debug.WriteLine("Person Theta position: {0}", th_person);
                                 k++;
                             }
                             temp_string = "";
@@ -417,8 +422,12 @@ namespace HelloTanvas
                         }
                     }
                     // Save as new previous string
-                    for (i = 0; i < inputstring; i++)
+                    for (i = 0; i < inputstringlen; i++)
                     {
+                        if (i==MAX_STRING_SAVE_PREV)
+                        {
+                            break;
+                        }
                         person_position_string_prev[i] = person_position_string[i];
                     }
 
@@ -500,13 +509,13 @@ namespace HelloTanvas
         }
         Tuple<int, int> unitytotanvas(int x_unity, int y_unity, float x_person_unity, float y_person_unity, float zoom_ratio)
         {
+            // +1 , -1
 
-            // Switch from coordinate system at lower left-hand corner to upper left-hand corner
-            // no change to tempx
-            float tempy = gridsize_unity - y_unity;
+            // Flip y-axis 
+            float tempy = - y_unity; 
             // Find the position of the building relative to the person at (0,0) in unity
-            float tempx = (x_unity - x_person_unity);
-            tempy = (tempy - (gridsize_unity - y_person_unity));
+            float tempx = x_unity - x_person_unity;
+            tempy = tempy + y_person_unity;
             // Scale to tablet coordinate system
             tempx = tempx * zoom_ratio;
             tempy = tempy * zoom_ratio;

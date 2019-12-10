@@ -9,7 +9,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <!--<Image Source="Assets/example1.png" Width="1280" Height="800" Margin="0,0,-412,-199" VerticalAlignment="Top" HorizontalAlignment="Left"/>-->
+        <Image Source="Assets/example2.png" Width="1280" Height="800" Margin="0,0,-412,-199" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <Canvas Name="mainCanvas" Height="Auto" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark" Opacity="0" />
         <!--RequestedTheme="Dark"-->
     </Grid>

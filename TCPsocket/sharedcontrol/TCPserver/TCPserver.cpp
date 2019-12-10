@@ -253,10 +253,6 @@ int __cdecl main(void)
 		} while (flag2 == 0);
 		getline(file_touchlocations, string_of_coordinates);
 		file_touchlocations.close();
-		// Reformatting for printing output to console
-		//LPCSTR sw = string_of_coordinates.c_str();
-		//OutputDebugString(sw);
-		//OutputDebugStringW(L"\n");
 
 		// Format to char for 
 		string_of_coordinates.copy(recvbuf, string_of_coordinates.size() + 1);
@@ -346,29 +342,25 @@ int __cdecl main(void)
 		//}
 		//if (done_message_sent == 0) {
 			// Send "Done" message after the entire string has been sent
-		//printf("Done \n");
+			// printf("Send done message \n");
+			iSendResult = send(ClientSocket, "Done", 5, 0);
+			if (iSendResult == SOCKET_ERROR) {
+				printf("send failed with error: %d\n", WSAGetLastError());
+				closesocket(ClientSocket);
+				WSACleanup();
+				return 1;
+			}
 
-		// printf("Send done message \n");
-		iSendResult = send(ClientSocket, "Done", 5, 0);
-		if (iSendResult == SOCKET_ERROR) {
-			printf("send failed with error: %d\n", WSAGetLastError());
-			closesocket(ClientSocket);
-			WSACleanup();
-			return 1;
-		}
-
-		//printf("Bytes sent: %d\n", iSendResult);
-		// Get reply
-		//printf("recieving \n");
-		iResult = recv(ClientSocket, recvbuf_person, DEFAULT_BUFLEN, 0);
-		if (iResult <= 0) {
-			flag = 1;
-		}
-		//printf("%s \n", recvbuf_person);
-		printtofile(recvbuf_person);
-		//printf("reply to done message recieved \n");
-		//done_message_sent = 1;
-
+			// Get reply
+			//printf("recieving \n");
+			iResult = recv(ClientSocket, recvbuf_person, DEFAULT_BUFLEN, 0);
+			if (iResult <= 0) {
+				flag = 1;
+			}
+			//printf("reply to done message recieved \n");
+			printtofile(recvbuf_person);
+			//done_message_sent = 1;
+		
 	} while (flag == 0);
 
 	printf("Closing Socket\n");

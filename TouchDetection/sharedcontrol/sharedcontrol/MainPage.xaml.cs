@@ -34,7 +34,7 @@ namespace sharedcontrol
         int H_tablet = 780; //1024;
 
         // Distance in the unity environment to show on tablet (for height)
-        int H_unity = 30;
+        int H_unity = 10;
 
         // Position of person in tablet
         int x_person_tablet;
@@ -89,6 +89,9 @@ namespace sharedcontrol
             openPicker2.SuggestedStartLocation = PickerLocationId.Downloads;
             openPicker2.FileTypeFilter.Add(".txt");
             newFile = await openPicker2.PickSingleFileAsync();
+
+            // Saves empty string of coordinates to file 
+            savefile();
         }
         void target_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
@@ -161,8 +164,23 @@ namespace sharedcontrol
             //    file_created = true;
             //}
 
-            await Windows.Storage.FileIO.WriteTextAsync(newFile, string_of_coordinates);
+            bool need_save_file = true;
+            String string_of_coordinates2 = string_of_coordinates;
+            while (need_save_file)
+            {
+                need_save_file = false;
+                try
+                {
+                    await Windows.Storage.FileIO.WriteTextAsync(newFile, string_of_coordinates2);
+                    System.Diagnostics.Debug.WriteLine("Tried to save file");
+                }
+                catch
+                {
+                    System.Diagnostics.Debug.WriteLine("Exception occurred while saving file.");
+                    need_save_file = true;
+                }
 
+            }
         }
     }
 }

@@ -7,9 +7,9 @@ from bld_2vert import draw_bld_2vert
 from person import draw_person
 import os.path as path
 
-# example number 1 for the person at (23,9,0) 10 building zoom
-# example number 2 for the person at (7,13,0) 10 building zoom
-examplenum = 1;
+# example number 1 for the person at (23,11,0) 10 building zoom
+# example number 2 for the person at (7,14,0) 10 building zoom
+examplenum = 2;
 
 # How to run from command on windows
 # go to folder and type python example1.py
@@ -24,15 +24,16 @@ W_tablet = 1280; #1024;
 # Ratio for zooming
 zoom_ratio = H_tablet / H_unity;
 
-# PERSON
-person_x = 562;
-person_y = 312;
+
 # Size of the person in unity
 H_person_unity = 2;
 # Size of the person in tanvas
 H_person_tablet = int(round(H_person_unity * zoom_ratio));
 W_person_tablet = H_person_tablet;
-
+# PERSON
+#unity_one = int(round(1 * zoom_ratio))
+person_x = 562; #-unity_one;
+person_y = 312; #-unity_one;
 im = Image.new('RGB',(W_tablet,H_tablet),(255,255,255));
 name =  path.abspath(path.join(__file__ ,"../..")); # move up two files in directory
 
