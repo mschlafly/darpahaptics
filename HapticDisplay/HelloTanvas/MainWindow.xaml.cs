@@ -624,27 +624,27 @@ namespace HelloTanvas
             return new Tuple<int, int>(x_tanvas, y_tanvas);
         }
 
-        // Transformation for going from tanvas' local or global frame to unity's frame. 
-        // Make sure to use the correct zoom_ratio, either zoom_local or zoom_global
-        // For translating to global coordinates, use x_person_unity=y_person_unity=15
-        Tuple<int, int> tanvastounity(double x_tanvas, double y_tanvas, float x_person_unity, float y_person_unity, float zoom_ratio)
-        {
+        //// Transformation for going from tanvas' local or global frame to unity's frame. 
+        //// Make sure to use the correct zoom_ratio, either zoom_local or zoom_global
+        //// For translating to global coordinates, use x_person_unity=y_person_unity=15
+        //Tuple<int, int> tanvastounity(double x_tanvas, double y_tanvas, float x_person_unity, float y_person_unity, float zoom_ratio)
+        //{
 
-            // Translate the coordinates so that the person is at (0,0)
-            double tempx = x_tanvas - x_person_tablet;
-            double tempy = y_tanvas - y_person_tablet;
-            // Scale to unity coordinate system
-            tempx = tempx / zoom_ratio;
-            tempy = tempy / zoom_ratio;
-            // Find the absolute position of the building in unity
-            int x_unity = Convert.ToInt32(Math.Round(tempx + x_person_unity));
-            int y_unity = Convert.ToInt32(Math.Round(tempy + (gridsize_unity - y_person_unity)));
-            // Switch from coordinate system at upper left-hand corner to lower left-hand corner
-            // no change to tempx
-            y_unity = gridsize_unity - y_unity;
+        //    // Translate the coordinates so that the person is at (0,0)
+        //    double tempx = x_tanvas - x_person_tablet;
+        //    double tempy = y_tanvas - y_person_tablet;
+        //    // Scale to unity coordinate system
+        //    tempx = tempx / zoom_ratio;
+        //    tempy = tempy / zoom_ratio;
+        //    // Find the absolute position of the building in unity
+        //    int x_unity = Convert.ToInt32(Math.Round(tempx + x_person_unity));
+        //    int y_unity = Convert.ToInt32(Math.Round(tempy + (gridsize_unity - y_person_unity)));
+        //    // Switch from coordinate system at upper left-hand corner to lower left-hand corner
+        //    // no change to tempx
+        //    y_unity = gridsize_unity - y_unity;
 
-            return new Tuple<int, int>(x_unity, y_unity);
-        }
+        //    return new Tuple<int, int>(x_unity, y_unity);
+        //}
 
         private byte[] ConvertPngToByteArray(Uri imageUri, ref int width, ref int height)
         {

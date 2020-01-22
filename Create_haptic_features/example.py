@@ -9,7 +9,7 @@ import os.path as path
 
 # example number 1 for the person at (23,11,0) 10 building zoom
 # example number 2 for the person at (7,14,0) 10 building zoom
-examplenum = 2;
+examplenum = 1;
 
 # How to run from command on windows
 # go to folder and type python example1.py
@@ -143,10 +143,10 @@ for x in range(-100,W_tablet,1):
                 draw_bld_2vert(x,y,W_building_tablet,H_building_tablet,xmax,ymax,im)
 
 if (examplenum == 1):
-    im.save(name+'/TouchDetection/directcontrol/directcontrol/Assets/example1.png');
-    im.save(name+'/TouchDetection/sharedcontrol/sharedcontrol/Assets/example1.png');
+    im.save(name+'/TouchDetection/ergodicinput/ergodicinput/Assets/example1.png');
+    im.save(name+'/TouchDetection/waypointinput/waypointinput/Assets/example1.png');
 elif (examplenum == 2):
-    im.save(name+'/TouchDetection/directcontrol/directcontrol/Assets/example2.png');
-    im.save(name+'/TouchDetection/sharedcontrol/sharedcontrol/Assets/example2.png');
+    im.save(name+'/TouchDetection/ergodicinput/ergodicinput/Assets/example2.png');
+    im.save(name+'/TouchDetection/waypointinput/waypointinput/Assets/example2.png');
 
 im.show()

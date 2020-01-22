@@ -1,7 +1,7 @@
 ﻿<Application
-    x:Class="sharedcontrol.App"
+    x:Class="waypointinput.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:sharedcontrol">
+    xmlns:local="using:waypointinput">
 
 </Application>

@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="f7eba44f-463f-4486-b626-091c14f1f713"
-    Publisher="CN=numur"
+    Name="aa229af9-fe3f-49e2-b258-89a4c654f3db"
+    Publisher="CN=brandon"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="f7eba44f-463f-4486-b626-091c14f1f713" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="aa229af9-fe3f-49e2-b258-89a4c654f3db" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>sharedcontrol</DisplayName>
-    <PublisherDisplayName>numur</PublisherDisplayName>
+    <DisplayName>waypointinput</DisplayName>
+    <PublisherDisplayName>brandon</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -30,12 +30,12 @@
   <Applications>
     <Application Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="sharedcontrol.App">
+      EntryPoint="waypointinput.App">
       <uap:VisualElements
-        DisplayName="sharedcontrol"
+        DisplayName="waypointinput"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="sharedcontrol"
+        Description="waypointinput"
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
