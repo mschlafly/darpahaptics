@@ -35,7 +35,7 @@ using namespace std;
 // Set up file for reading - if not working, maybe try replacing the '/' with '\\'
 string docPath_touch = "C:/Users/numur/Downloads/touch_locations.txt";
 string docPath_person = "C:/Users/numur/Desktop/darpa/darpahaptics/HapticDisplay/person_position.txt";
-int filefetch_wait = 100; // Milliseconds between trying to open file
+int filefetch_wait = 10; // Milliseconds between trying to open file
 
 #define DEFAULT_BUFLEN 100 // Max length of string to send over TCP socket
 #define MAX_STRING 10000 // Maximum length of text file string 
@@ -212,7 +212,7 @@ void printtofile(char recvbuf_person[DEFAULT_BUFLEN]) {
 		} while (flag2 == 0);
 		file_personlocation << person_location_string;
 		file_personlocation.close();
-		cout << "New person position" << person_location_string << "\n";
+		cout << "New person position: " << person_location_string << "\n";
 
 		// Save as new previous string
 		for (i = 0; i < MAX_STRING_SAVE_PREV_PERSON; i++) {
@@ -249,7 +249,7 @@ bool EchoIncomingPackets(SOCKET sd)
 	bool endhere = false;
 	int recvbuf_1len;
 	bool done_message_sent = true;
-	bool first_iter = true;
+	bool first_iter = 1;
 	int nReadBytes, nTemp;
 
 	// Send string messages to linux machine
@@ -279,7 +279,16 @@ bool EchoIncomingPackets(SOCKET sd)
 
 		// Check if the string is equal to the previous and it is not empty
 		i = 0;
-		if (recvbuflen == 0) {
+		if (first_iter == 1) {
+			strings_equal = 1;
+			first_iter = 0;
+			printf("First iteration \n ");
+			// Save as previous string
+			for (i = 0; i < MAX_STRING_SAVE_PREV; i++) {
+				recvbuf_prev[i] = recvbuf[i];
+			}
+		}
+		else if (recvbuflen == 0) {
 			strings_equal = 1;
 		}
 		else {
@@ -293,10 +302,11 @@ bool EchoIncomingPackets(SOCKET sd)
 
 		// If string is new, 
 		if (strings_equal) {
+			//printf("string equal \n");
 			// Don't do anything
 		}
 		else {
-			printf("New string \n");
+			// printf("New string \n");
 
 			// Save as new previous string
 			for (i = 0; i < MAX_STRING_SAVE_PREV; i++) {
@@ -347,7 +357,7 @@ bool EchoIncomingPackets(SOCKET sd)
 			// Continue as long as there are still characters in string that need to be send 
 			} while (i_start < recvbuflen);
 		}
-		printf("Send done message \n");
+		// printf("Send done message \n");
 		nTemp = send(sd, "Done", 5, 0);
 		if (nTemp == SOCKET_ERROR) {
 			return false;
@@ -355,6 +365,11 @@ bool EchoIncomingPackets(SOCKET sd)
 
 		// Get reply
 		nReadBytes = recv(sd, recvbuf_person, DEFAULT_BUFLEN, 0);
+		if (nReadBytes <= 0) {
+			flag = 1;
+		}
+		// printf("reply recieved \n");
+		printtofile(recvbuf_person);
 	} while (flag == 0);
 
 	// Original code from template

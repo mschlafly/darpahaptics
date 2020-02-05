@@ -51,7 +51,7 @@ int num_values_in_message=0;
 int comma_index = 0;
 // Set done and num_index as if "Done" message was just sent
 int done = 0;
-int num_index = 2
+int num_index = 2;
 
 using namespace std;
 // Define global variables for postition of person_location
@@ -128,7 +128,7 @@ int main(int argc , char *argv[])
   // Testing connection
   /////////////////////////////////////////////////////////////////
 	//Send data for test
-	message = "Testing connection";
+	message = "?Testing connection";
 	if( send(socket_desc , message , strlen(message) , 0) < 0)
 	{
 		puts("Send failed");
@@ -154,8 +154,7 @@ int main(int argc , char *argv[])
 			puts("recv failed");
 		}
     // Print message
-		//	puts(message_from_server);
-		//printf("\n");
+		// puts(message_from_server);
 
     // Publish message when the server is done sending the coordinates
     if ((message_from_server[0]=='D') &&
@@ -169,6 +168,8 @@ int main(int argc , char *argv[])
               send_array.datalen = num_values_in_message;
               pub.publish(send_array);
               printf("Input coordinates published w/ size %d \n",num_values_in_message);
+              ros::spinOnce(); // Standard line to allow services
+              sleep(0.5);
 
               // Clear send_array values and set values to zero to prepare for new message
     		      send_array.xinput.clear();
@@ -185,13 +186,12 @@ int main(int argc , char *argv[])
               pub.publish(send_array);
               printf("Empty array published \n");
 
-              ros::spinOnce(); // Standard line to allow services
-              sleep(0.5);
             }
             done = 1;
     } else
     // Store coordinates in message from server
     {
+      puts(message_from_server);
       // Strings follow format "x-coor,y-coor,....x-coor,y-coor,!"
       // Define variables for unpacking string
       flag_exclaim = 0; // flag for exclaimation mark
@@ -209,7 +209,7 @@ int main(int argc , char *argv[])
   		{
         if ((int)message_from_server[i]==33) {
           flag_exclaim = 1;
-          printf("String ends \n");
+          // printf("String ends \n");
         }
         if ((int)message_from_server[i]==44) {
           flag_comma = 1;
@@ -249,6 +249,8 @@ int main(int argc , char *argv[])
             coordinate = 'x';
             //printf("coordinate y found %f \n", temp_y);
 
+            int unity_x=temp_x, unity_y=temp_y;
+    //         // printf("input_mode: %s",input_mode)
             // Perform the rest of the coordinate transform depending on input_mode
             if (input_mode=='l') {
               // The points recieved here are in relative the the person's position
@@ -259,24 +261,24 @@ int main(int argc , char *argv[])
               float temp_y2 = temp_x*sin(-th)+temp_y*cos(-th);
 
               // Find absolute coordinates not relative
-              int temp_x3 = round(temp_x2 + xloc);
+              unity_x = round(temp_x2 + xloc);
               temp_y2 = temp_y2 + (gridsize_unity - yloc); // finish conversion, uncomment when using UWP touch program
-              int temp_y3 = round(gridsize_unity - temp_y2); // finish conversion, uncomment when using UWP touch program
+              unity_y = round(gridsize_unity - temp_y2); // finish conversion, uncomment when using UWP touch program
 
-              printf("Transformed coordinates- x: %d y: %d \n",temp_x3,temp_y3);
+              printf("Transformed coordinates- x: %d y: %d \n",unity_x,unity_y);
             } else if (input_mode=='g') {
               // Find absolute coordinates not relative
-              int temp_x3 = round(temp_x + x_middle);
+              unity_x = round(temp_x + x_middle);
               float temp_y2 = temp_y + (gridsize_unity - y_middle); // finish conversion, uncomment when using UWP touch program
-              int temp_y3 = round(gridsize_unity - temp_y2); // finish conversion, uncomment when using UWP touch program
-              printf("Transformed coordinates- x: %d y: %d \n",temp_x3,temp_y3);
+              unity_y = round(gridsize_unity - temp_y2); // finish conversion, uncomment when using UWP touch program
+              printf("Transformed coordinates- x: %d y: %d \n",unity_x,unity_y);
 
             }
 
             // If within grid, append array message with values
-            if ((temp_x3>=0) && (temp_x3<=29) && (temp_y3>=0) && (temp_y3<=29)){
-                send_array.xinput.push_back(temp_number); // add to message
-                send_array.yinput.push_back(temp_number);
+            if ((unity_x>=0) && (unity_x<=29) && (unity_y>=0) && (unity_y<=29)){
+                send_array.xinput.push_back(unity_x); // add to message
+                send_array.yinput.push_back(unity_y);
                 num_values_in_message++;
 		            // printf("adds values to message- x: %d y: %d \n ",temp_x3,temp_y3);
             }
