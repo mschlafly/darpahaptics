@@ -178,7 +178,7 @@ namespace waypointinput
                 int y_unity = Convert.ToInt32(Math.Round(tempy));
                 if (string_of_coordinates == "")
                 {
-                    string_of_coordinates = string_of_coordinates + "5," + mode_string + ",";
+                    string_of_coordinates = string_of_coordinates + mode_string + ",";
                 }
                 if ((x_unity_prev == x_unity) && (y_unity_prev == y_unity))
                 {

@@ -26,8 +26,8 @@ namespace HelloTanvas
     /// </summary>
     public partial class MainWindow : Window
     {
-        string docPath_person = "C:/Users/brandon/Desktop/darpa/darpahaptics/HapticDisplay"; // Path text files with the person's positon
-        string docPath_mode = "C:/Users/brandon/Downloads"; // Path for text files with tanvas mode
+        string docPath_person = "C:/Users/numur/Desktop/darpa/darpahaptics/HapticDisplay"; // Path text files with the person's positon
+        string docPath_mode = "C:/Users/numur/Downloads"; // Path for text files with tanvas mode
         // Time vairables for detecting double tap and input
         DateTime onetap_time = DateTime.Now;
         DateTime starttime = DateTime.Now;
@@ -391,7 +391,7 @@ namespace HelloTanvas
                 i = 0;
                 inputstringlen = person_position_string.Length;
                 strings_equal = (person_position_string_prev[i] == person_position_string[i]);
-                while (strings_equal && (i < inputstringlen))
+                while (strings_equal && (i < MAX_STRING_SAVE_PREV))
                 {
                     strings_equal = (strings_equal && (person_position_string_prev[i] == person_position_string[i]));
                     i++;
@@ -480,7 +480,7 @@ namespace HelloTanvas
                         }
 
                         // Add the global sprite 
-                        //myView.AddSprite(global_sprite);
+                        myView.AddSprite(global_sprite);
 
                         strings_equal = false;
                         mode_prev = "g";
