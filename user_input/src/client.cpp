@@ -55,8 +55,8 @@ int num_index = 2;
 
 using namespace std;
 // Define global variables for postition of person_location
-int xloc = 15;
-int yloc = 15;
+float xloc = 15;
+float yloc = 15;
 float th = 0;
 int x_middle = 15;
 int y_middle = 15;
@@ -67,12 +67,15 @@ int gridsize_unity = 30;
 
 void chatterCallback(const user_input::person_position::ConstPtr& msg)
 {
-  printf("Updating the person's position\n");
+  // printf("Updating the person's position\n");
   xloc = msg->xpos;
+  int xloc_int = (int)(xloc*100+0.5); // add 0.5 for rounding because (int) truncates
   yloc = msg->ypos;
+  int yloc_int = (int)(yloc*100+0.5);
   th = msg->theta;
-  location_string = to_string(xloc) + "," + to_string(yloc) + "," + to_string(th) + "," + "!";
-  //printf("location_string %s \n",location_string);
+  int th_int = (int)(th*1000);
+  location_string = to_string(xloc_int) + ","  + to_string(yloc_int) + "," + to_string(th_int) + "," + "!";
+  // printf("location_string %s \n",location_string);
 }
 
 int main(int argc , char *argv[])
@@ -96,7 +99,7 @@ int main(int argc , char *argv[])
   ros::spinOnce();
 
   // Set up Subscriber
-  ros::Subscriber sub = n.subscribe("person_location", 1000, chatterCallback);
+  ros::Subscriber sub = n.subscribe("person_position", 1000, chatterCallback);
 
   /////////////////////////////////////////////////////////////////
   // Setting up TCP socket
@@ -236,9 +239,10 @@ int main(int argc , char *argv[])
           {
             send_array.droneID = temp_number;
             num_index++;
-          } else if (num_index == 1) // the second number is the view (arial = )
+          } else if (num_index == 1) // the second number is the view (arial= 'g', local = 'l' )
           {
             input_mode = temp_char[0];
+            // printf("input_mode: %c\n", temp_char[0]);
             num_index++;
           } else if (coordinate == 'x') {
             temp_x = temp_number;
