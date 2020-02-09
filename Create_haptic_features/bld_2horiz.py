@@ -1,6 +1,7 @@
 from PIL import Image
 import math
 from draw_bands import draw_bands_vertical,draw_bands_horizontal
+from draw_bushes import draw_bushes
 import os.path as path
 
 
@@ -33,7 +34,6 @@ def draw_bld_2horiz(x,y,W_building_tablet, H_building_tablet,xmax,ymax,im):
     # print(band_width,band_width*(numbands-1)+black_width,W_building_tablet,diff,white_width);
     draw_bands_horizontal(x,y,xmax,ymax,W_building_tablet,black_width,darkgrey_width,grey_width,white_width,im)
 
-
 # Distance in the unity environment to show on tablet (for height)
 H_unity = 10;
 
@@ -52,6 +52,7 @@ H_building_tablet = int(round(H_building_unity * zoom_ratio));
 W_building_tablet = H_building_tablet * 2;
 
 im = Image.new('RGB',(W_building_tablet,H_building_tablet),(255,255,255));
+im2 = Image.new('RGB',(W_building_tablet,H_building_tablet),(255,255,255));
 name =  path.abspath(path.join(__file__ ,"../..")); # move up two files in directory
 
 #print(W_building_tablet,H_building_tablet);
@@ -59,6 +60,8 @@ name =  path.abspath(path.join(__file__ ,"../..")); # move up two files in direc
 x=0;
 y=0;
 draw_bld_2horiz(x,y,W_building_tablet,H_building_tablet,W_building_tablet,H_building_tablet,im)
-
-im.show()
+draw_bushes(x,y,W_building_tablet,H_building_tablet,W_building_tablet,H_building_tablet,im2)
+# im.show()
+# im2.show()
 im.save(name+'/HapticDisplay/HelloTanvas/Assets/bld_2horiz.png');
+im2.save(name+'/HapticDisplay/HelloTanvas/Assets/bush_2horiz.png');

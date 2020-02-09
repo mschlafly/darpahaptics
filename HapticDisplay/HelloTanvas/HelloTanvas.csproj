@@ -139,6 +139,10 @@
     <Resource Include="Assets\bld_small.png" />
     <Resource Include="Assets\bld_2vert.png" />
     <Resource Include="Assets\global.png" />
+    <Resource Include="Assets\bush_2horiz.png" />
+    <Resource Include="Assets\bush_2vert.png" />
+    <Resource Include="Assets\bush_large.png" />
+    <Resource Include="Assets\bush_small.png" />
     <Content Include="tanvastouch.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

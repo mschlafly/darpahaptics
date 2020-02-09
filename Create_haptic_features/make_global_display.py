@@ -19,7 +19,7 @@ for x in range(1030,1280,1):
     for y in range(0,H_tablet,1):
         im.putpixel((x,y),(0,0,0));
 
-im.save(name+'/TouchDetection/directcontrol/directcontrol/Assets/global.png');
+im.save(name+'/TouchDetection/training/training/Assets/global.png');
 im.save(name+'/HapticDisplay/HelloTanvas/Assets/global.png');
 
 im.show()
