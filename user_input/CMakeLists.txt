@@ -13,6 +13,7 @@ add_message_files(
   FILES
   input_array.msg
   person_position.msg
+  #object_position.msg
 )
 
 generate_messages(
