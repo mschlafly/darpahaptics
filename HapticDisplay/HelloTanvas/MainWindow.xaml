@@ -11,7 +11,7 @@
         WindowState="Maximized">
     <Grid>
         <!--<Image Source="Assets/HelloTanvas_visual.png" Width="1020" Height="738" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Left"/>-->
-        <!--<Image Source="Assets/example2.png" Width="1280" Height="800" Margin="0,0,-412,-199" VerticalAlignment="Top" HorizontalAlignment="Left"/>-->
+        <Image Source="Assets/global.png" Width="1330" Height="969" Margin="0,0,-562,-434" VerticalAlignment="Top" HorizontalAlignment="Left" RenderTransformOrigin="0.386,0.394"/>
         <!--<Rectangle Fill="Black" Name="manRect"
                  Width="1280" Height="800" 
                  IsManipulationEnabled="true" Opacity="0"

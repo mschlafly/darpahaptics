@@ -27,8 +27,9 @@ namespace HelloTanvas
     public partial class MainWindow : Window
     {
         string environment_complexity = "low"; // CHANGE THIS EVERY TIME! This should be either "high" or "low" depending on the trial being run. 
-        string docPath_person = "C:/Users/numur/Desktop/darpa/darpahaptics/HapticDisplay"; // Path text files with the person's positon
-        string docPath_mode = "C:/Users/numur/Downloads"; // Path for text files with tanvas mode
+        string docPath_person = "C:/Users/brandon/Desktop/darpa/darpahaptics/HapticDisplay"; // Path text files with the person's positon
+        //string docPath_person = "C:/Users/brandon/Downloads"; // Path text files with the person's positon
+        string docPath_mode = "C:/Users/brandon/Downloads"; // Path for text files with tanvas mode
         // Time vairables for detecting double tap and input
         DateTime onetap_time = DateTime.Now;
         DateTime starttime = DateTime.Now;
@@ -396,6 +397,9 @@ namespace HelloTanvas
             person_sprite.Height = height;
             person_sprite.X = person_sprite_position.Item1;
             person_sprite.Y = person_sprite_position.Item2 + tanvas_ydir_offset;
+            //person_sprite.PivotX = x_person_tablet;
+            //person_sprite.PivotY = y_person_tablet;
+            //person_sprite.Rotation = 0;
             myView.AddSprite(person_sprite);
 
             ///////////////////////////////////////////////////////////////////////////////////////
@@ -414,10 +418,13 @@ namespace HelloTanvas
             global_sprite = new TSprite();
             global_sprite.Material = global_material;
             global_sprite.X = 0;
-            global_sprite.Y = tanvas_ydir_offset;
+            global_sprite.Y = tanvas_ydir_offset - 250;
             global_sprite.Width = width;
             global_sprite.Height = height;
-            //myView.AddSprite(global_sprite);
+            global_sprite.PivotX = x_person_tablet;
+            global_sprite.PivotY = y_person_tablet;
+            global_sprite.Rotation = 0;
+            myView.AddSprite(global_sprite);
 
             /////////////////////////////////////////////////////////////////////////////////////////
             ////                             Small Building & Bush 
@@ -737,6 +744,7 @@ namespace HelloTanvas
                 try
                     {
                         person_position_string = File.ReadAllText(System.IO.Path.Combine(docPath_person, "person_position.txt"));
+                        //Console.WriteLine("Read person_position.txt");
                     }
                     catch
                     {
@@ -850,6 +858,9 @@ namespace HelloTanvas
                         //}
 
                         //Add the global sprite
+                        //global_sprite.PivotX = x_person_tablet;
+                        //global_sprite.PivotY = y_person_tablet;
+                        global_sprite.Rotation = th_person;
                         myView.AddSprite(global_sprite);
 
                         strings_equal = false;
@@ -865,12 +876,36 @@ namespace HelloTanvas
                         //Place person sprite on screen
                         //The person sprite has been made for the locel zoom_ratio, so it is no longer equal to 2 units in unity
                         int offset = 78; // The sprite for the person needs to be manually offset -78px in the x and -78px in the y
-                        person_sprite_position = unitytotanvas(Convert.ToInt32(Math.Round(x_person_unity)), Convert.ToInt32(Math.Round(y_person_unity)), 15.0f, 15.0f, zoom_global);
-                        person_sprite.X = person_sprite_position.Item1 - offset;
-                        person_sprite.Y = person_sprite_position.Item2 - offset;
-                        myView.AddSprite(person_sprite);
+                        float unity_middle = 15f;
+
+
+                        double tempx = (x_person_unity - unity_middle) * zoom_global;
+                        double tempy = (y_person_unity - unity_middle) * zoom_global;
+
+                        tempy = -tempy;
+
+                        double x_transformed = tempx * Math.Cos(th_person) - tempy * Math.Sin(th_person);
+                        double y_transformed = tempx * Math.Sin(th_person) + tempy * Math.Cos(th_person);
+                        //System.Diagnostics.Debug.WriteLine("X-value equal before {0} after {1}", x_person_unity, x_transformed + unity_middle);
+                        //System.Diagnostics.Debug.WriteLine("Y-value equal before {0} after {1}", y_person_unity, y_transformed + unity_middle);
+
+                        //y_transformed = -y_transformed; // flip y -axis
+
+                        int x_tanvas = Convert.ToInt32(Math.Round(x_transformed)) + x_person_tablet;
+                        int y_tanvas = Convert.ToInt32(Math.Round(y_transformed)) + y_person_tablet;
+
+                        //person_sprite_position = unitytotanvas(Convert.ToInt32(Math.Round(x_transformed + unity_middle)) - 1, Convert.ToInt32(Math.Round(y_transformed + unity_middle)) + 1, unity_middle, unity_middle, zoom_global);
+                        ////person_sprite_position = unitytotanvas(Convert.ToInt32(Math.Round(x_person_unity)), Convert.ToInt32(Math.Round(y_person_unity)), 15.0f, 15.0f, zoom_global);
+                        //person_sprite.X = person_sprite_position.Item1 - offset;
+                        //person_sprite.Y = person_sprite_position.Item2 - offset;
+
+                        person_sprite.X = x_tanvas - offset;
+                        person_sprite.Y = y_tanvas - offset;
                         System.Diagnostics.Debug.WriteLine("Person X position global tanvas frame: {0}", person_sprite_position.Item1);
                         System.Diagnostics.Debug.WriteLine("Person Y position global tanvas frame: {0}", person_sprite_position.Item2);
+                        global_sprite.Rotation = th_person;
+                        myView.AddSprite(global_sprite);
+                        myView.AddSprite(person_sprite);
                     }
                 }
                 else if (mode == "l")
@@ -878,9 +913,16 @@ namespace HelloTanvas
                     //Switch modes
                     if (mode_prev == "g")
                     {
+                        myView.AddSprite(person_sprite);
                         //Correct for global settings: remove global sprite and re - place person
                         myView.RemoveSprite(global_sprite); // Remove the global sprite 
-                        person_sprite_position = unitytotanvas(Convert.ToInt32(Math.Round(x_person_unity)) - 1, Convert.ToInt32(Math.Round(y_person_unity)) + 1, x_person_unity, y_person_unity, zoom_local);
+                        //// Rotate point to match unity view
+                        //float unity_middle = 15f;
+                        //double x_transformed = (x_person_unity - unity_middle) * Math.Cos(th_person) - (y_person_unity - unity_middle) * Math.Sin(th_person);
+                        //double y_transformed = (x_person_unity - unity_middle) * Math.Sin(th_person) + (y_person_unity - unity_middle) * Math.Cos(th_person);
+                        //System.Diagnostics.Debug.WriteLine("value equal before {0} after {1}", x_person_unity, x_transformed + unity_middle);
+                        //person_sprite_position = unitytotanvas(Convert.ToInt32(Math.Round(x_transformed + unity_middle)) - 1, Convert.ToInt32(Math.Round(y_transformed + unity_middle)) + 1, unity_middle, unity_middle, 0f);
+                        person_sprite_position = unitytotanvas(15-1, 15+1, 15.0f, 15.0f, zoom_global);
                         person_sprite.X = person_sprite_position.Item1;
                         person_sprite.Y = person_sprite_position.Item2 + tanvas_ydir_offset;
                         myView.AddSprite(person_sprite);

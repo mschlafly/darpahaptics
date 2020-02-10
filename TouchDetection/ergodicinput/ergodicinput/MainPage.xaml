@@ -9,13 +9,13 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <Canvas x:Name="mainCanvas" Height="Auto" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark" Opacity="0" Margin="0,0,130,0" />
+        <Canvas x:Name="mainCanvas" Height="Auto" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark" Opacity="0" />
 
-        <!--<Image Source="Assets/example2.png" Width="1280" Height="800" Margin="0,0,-412,-199" VerticalAlignment="Top" HorizontalAlignment="Left"/>-->
+        <!--<Image Source="Assets/global.png" Width="1887" Height="1195" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="42,-189,0,0"/>-->
 
-        <Button x:Name="btn3" Content="Mode"
+        <!--<Button x:Name="btn3" Content="Mode"
           Click="OnClick" ClickMode="Release"
-          Margin="1137,0,0,10" Width="91" Background="#339FFF7C" VerticalAlignment="Stretch"/>
+          Margin="1137,0,0,10" Width="91" Background="#339FFF7C" VerticalAlignment="Stretch"/>-->
 
     </Grid>
 </Page>

@@ -33,8 +33,9 @@ using namespace std;
 #include <iostream>
 #include <fstream>
 // Set up file for reading - if not working, maybe try replacing the '/' with '\\'
-string docPath_touch = "C:/Users/numur/Downloads/touch_locations.txt";
-string docPath_person = "C:/Users/numur/Desktop/darpa/darpahaptics/HapticDisplay/person_position.txt";
+string docPath_touch = "C:/Users/brandon/Downloads/touch_locations.txt";
+string docPath_person = "C:/Users/brandon/Desktop/darpa/darpahaptics/HapticDisplay/person_position.txt";
+string docPath_mode = "C:/Users/brandon/Downloads/tanvas_mode.txt";
 int filefetch_wait = 10; // Milliseconds between trying to open file
 
 #define DEFAULT_BUFLEN 100 // Max length of string to send over TCP socket
@@ -168,7 +169,7 @@ void AcceptConnections(SOCKET ListeningSocket)
 // Prints a char array to docPath_person if it is new
 void printtofile(char recvbuf_person[DEFAULT_BUFLEN]) {
 
-	//printf("New string: %s \n\n", recvbuf_person);
+	printf("New string: %s \n", recvbuf_person);
 	bool personpos_equal; // boolean to record whether recvbuf_person==recvbuf_person_prev
 	int i = 0;
 
@@ -229,7 +230,9 @@ bool EchoIncomingPackets(SOCKET sd)
 {
 	// Set up file for reading 
 	ifstream file_touchlocations;
+	ifstream file_mode;
 	string string_of_coordinates; // Variable to read from file
+	string mode; // Variable to read from file
 	string string_of_coordinates_prev; // Previous read to check to see if they are the same
 	bool strings_equal; // boolean to record whether string_of_coordinates==string_of_coordinates_prev
 	int len_string_of_coordinates;
@@ -255,7 +258,7 @@ bool EchoIncomingPackets(SOCKET sd)
 	// Send string messages to linux machine
 	flag = 0; // For while loop
 	do {
-		// Read file
+		// Read file for touch locations
 		flag2 = 0; // For determining if the file has been opened properly
 		do {
 			file_touchlocations.open(docPath_touch);
@@ -272,13 +275,33 @@ bool EchoIncomingPackets(SOCKET sd)
 		getline(file_touchlocations, string_of_coordinates);
 		file_touchlocations.close();
 
+		// Read file for mode
+		flag2 = 0; // For determining if the file has been opened properly
+		do {
+			file_mode.open(docPath_mode);
+			// Check is file has been opened properly, if not wait 
+			if (file_mode.is_open())
+			{
+				flag2 = 1;
+			}
+			else {
+				Sleep(filefetch_wait);
+				printf("failed to open \n");
+			}
+		} while (flag2 == 0);
+		//printf("%c \n", mode);
+		getline(file_mode, mode);
+		file_mode.close();
+
+		string_of_coordinates = mode + "," + string_of_coordinates;
+
 		// Format to char for sending over socket
 		string_of_coordinates.copy(recvbuf, string_of_coordinates.size() + 1);
 		recvbuf[string_of_coordinates.size()] = '\0'; // terminate char
 		recvbuflen = string_of_coordinates.size();
 
 		// Check if the string is equal to the previous and it is not empty
-		i = 0;
+		i = 0; // don't check the first character containing the mode
 		if (first_iter == 1) {
 			strings_equal = 1;
 			first_iter = 0;
@@ -368,7 +391,7 @@ bool EchoIncomingPackets(SOCKET sd)
 		if (nReadBytes <= 0) {
 			flag = 1;
 		}
-		// printf("reply recieved \n");
+		 //printf("reply recieved \n");
 		printtofile(recvbuf_person);
 	} while (flag == 0);
 
