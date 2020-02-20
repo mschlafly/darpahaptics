@@ -33,9 +33,9 @@ using namespace std;
 #include <iostream>
 #include <fstream>
 // Set up file for reading - if not working, maybe try replacing the '/' with '\\'
-string docPath_touch = "C:/Users/brandon/Downloads/touch_locations.txt";
-string docPath_person = "C:/Users/brandon/Desktop/darpa/darpahaptics/HapticDisplay/person_position.txt";
-string docPath_mode = "C:/Users/brandon/Downloads/tanvas_mode.txt";
+string docPath_touch = "C:/Users/numur/Downloads/touch_locations.txt";
+string docPath_person = "C:/Users/numur/Desktop/darpa/darpahaptics/HapticDisplay/person_position.txt";
+string docPath_mode = "C:/Users/numur/Downloads/tanvas_mode.txt";
 int filefetch_wait = 10; // Milliseconds between trying to open file
 
 #define DEFAULT_BUFLEN 100 // Max length of string to send over TCP socket

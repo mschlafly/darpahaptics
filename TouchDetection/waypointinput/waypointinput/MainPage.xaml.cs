@@ -50,7 +50,7 @@ namespace waypointinput
         // For setting the agentID 
         Windows.UI.Input.PointerPoint prevPoint;
         bool setting_agent_ID = false;
-        int wait_time = 3500; // ms - time period to specify how many drones
+        int wait_time = 4500; // ms - time period to specify how many drones
         int drone_number = 0;
 
         // For saving and recieving info from files

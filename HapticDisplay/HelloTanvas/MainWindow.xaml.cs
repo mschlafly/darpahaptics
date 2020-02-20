@@ -27,9 +27,9 @@ namespace HelloTanvas
     public partial class MainWindow : Window
     {
         string environment_complexity = "low"; // CHANGE THIS EVERY TIME! This should be either "high" or "low" depending on the trial being run. 
-        string docPath_person = "C:/Users/brandon/Desktop/darpa/darpahaptics/HapticDisplay"; // Path text files with the person's positon
+        string docPath_person = "C:/Users/numur/Desktop/darpa/darpahaptics/HapticDisplay"; // Path text files with the person's positon
         //string docPath_person = "C:/Users/brandon/Downloads"; // Path text files with the person's positon
-        string docPath_mode = "C:/Users/brandon/Downloads"; // Path for text files with tanvas mode
+        string docPath_mode = "C:/Users/numur/Downloads"; // Path for text files with tanvas mode
         // Time vairables for detecting double tap and input
         DateTime onetap_time = DateTime.Now;
         DateTime starttime = DateTime.Now;
@@ -745,15 +745,15 @@ namespace HelloTanvas
                     {
                         person_position_string = File.ReadAllText(System.IO.Path.Combine(docPath_person, "person_position.txt"));
                         //Console.WriteLine("Read person_position.txt");
-                    }
+                }
                     catch
                     {
                         Console.WriteLine("Could not read person_position.txt");
                     }
                 i = 0;
-                inputstringlen = person_position_string.Length;
+            inputstringlen = person_position_string.Length;
                 strings_equal = (person_position_string_prev[i] == person_position_string[i]);
-                while (strings_equal && (i < MAX_STRING_SAVE_PREV))
+                while (strings_equal && (i < MAX_STRING_SAVE_PREV) && (i < inputstringlen))
                 {
                     strings_equal = (strings_equal && (person_position_string_prev[i] == person_position_string[i]));
                     i++;
@@ -823,6 +823,8 @@ namespace HelloTanvas
                     //Switch modes
                     if (mode_prev == "l")
                     {
+                        // if we go back to global and updates, the update person position here 
+
                         ////Delete building sprites(may need to remove from list?)
                         //for (i = 0; i < num_bld_small; i++)
                         //{
@@ -895,14 +897,14 @@ namespace HelloTanvas
                         int y_tanvas = Convert.ToInt32(Math.Round(y_transformed)) + y_person_tablet;
 
                         //person_sprite_position = unitytotanvas(Convert.ToInt32(Math.Round(x_transformed + unity_middle)) - 1, Convert.ToInt32(Math.Round(y_transformed + unity_middle)) + 1, unity_middle, unity_middle, zoom_global);
-                        ////person_sprite_position = unitytotanvas(Convert.ToInt32(Math.Round(x_person_unity)), Convert.ToInt32(Math.Round(y_person_unity)), 15.0f, 15.0f, zoom_global);
-                        //person_sprite.X = person_sprite_position.Item1 - offset;
-                        //person_sprite.Y = person_sprite_position.Item2 - offset;
+                        //person_sprite_position = unitytotanvas(Convert.ToInt32(Math.Round(x_person_unity)), Convert.ToInt32(Math.Round(y_person_unity)), 15.0f, 15.0f, zoom_global);
+                        person_sprite.X = person_sprite_position.Item1 - offset;
+                        person_sprite.Y = person_sprite_position.Item2 - offset;
 
                         person_sprite.X = x_tanvas - offset;
                         person_sprite.Y = y_tanvas - offset;
-                        System.Diagnostics.Debug.WriteLine("Person X position global tanvas frame: {0}", person_sprite_position.Item1);
-                        System.Diagnostics.Debug.WriteLine("Person Y position global tanvas frame: {0}", person_sprite_position.Item2);
+                        //System.Diagnostics.Debug.WriteLine("Person X position global tanvas frame: {0}", person_sprite_position.Item1);
+                        //System.Diagnostics.Debug.WriteLine("Person Y position global tanvas frame: {0}", person_sprite_position.Item2);
                         global_sprite.Rotation = th_person;
                         myView.AddSprite(global_sprite);
                         myView.AddSprite(person_sprite);

@@ -14,8 +14,7 @@
         <!--<Image Source="Assets/global.png" Width="1887" Height="1195" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="42,-189,0,0"/>-->
 
         <!--<Button x:Name="btn3" Content="Mode"
-          Click="OnClick" ClickMode="Release"
-          Margin="1137,0,0,10" Width="91" Background="#339FFF7C" VerticalAlignment="Stretch"/>-->
+          Click="OnClick" ClickMo="1137,0,0,10" Width="91" Background="#339FFF7C" VerticalAlignment="Stretch"/>-->
 
     </Grid>
 </Page>
