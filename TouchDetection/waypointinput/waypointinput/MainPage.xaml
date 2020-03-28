@@ -10,12 +10,5 @@
 
     <Grid>
         <Canvas x:Name="mainCanvas" Height="Auto" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark" Opacity="0" />
-
-        <!--<Image Source="Assets/example2.png" Width="1280" Height="800" Margin="0,0,-412,-199" VerticalAlignment="Top" HorizontalAlignment="Left"/>-->
-
-        <!--<Button x:Name="btn3" Content="ModeBTN"
-          Click="OnClick" ClickMode="Release"
-          Margin="1137,0,0,10" Width="91" Background="#339FFF7C" VerticalAlignment="Stretch"/>-->
-
     </Grid>
 </Page>

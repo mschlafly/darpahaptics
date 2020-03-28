@@ -1,8 +1,9 @@
 from PIL import Image
 
+# Creates haptic bitmap representing a band
+
 def make_band(x,y,section_width,section_height,band_size,color,x_max,y_max,im):
     # Top band
-    # 312 156
     for y_i in range(y,y+band_size):
         for x_i in range(x,x+section_width):
             if ((x_i<=x_max) and (y_i<=y_max) and (x_i>=0) and (y_i>=0)):

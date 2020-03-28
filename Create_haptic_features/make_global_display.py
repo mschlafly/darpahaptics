@@ -4,6 +4,11 @@ from draw_bands import draw_bands_vertical,draw_bands_horizontal
 import os.path as path
 from person import draw_person
 
+# makes haptic bitmap for boundaries and
+# an example where the person position is 23,10,0 - person_position.txt =2300,1000,0,!
+# note that the location of the person here is a little off.
+# this is a problem with the transformation used for the generation of the visual
+
 # How to run from command on windows
 # go to folder and type python example1.py
 
@@ -143,14 +148,6 @@ diff = H_building_tablet - (band_width*(numbands-1)+black_width);
 white_width = white_width + int(round(diff/(numbands-1)));
 #print(black_width,darkgrey_width,grey_width,white_width)
 draw_bands_horizontal(x,y,xmax,ymax,W_building_tablet,black_width,darkgrey_width,grey_width,white_width,im)
-
-# draw_bld_small(x,y,W_building_tablet,H_building_tablet,xmax,ymax,im)
-# for x in range(0,249,1):
-#     for y in range(0,H_tablet,1):
-#         im.putpixel((x,y),(0,0,0))
-# for x in range(1030,1280,1):
-#     for y in range(0,H_tablet,1):
-#         im.putpixel((x,y),(0,0,0))
 
 im.save(name+'/HapticDisplay/HelloTanvas/Assets/global.png')
 
